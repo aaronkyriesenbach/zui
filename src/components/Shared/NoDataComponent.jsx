@@ -14,10 +14,14 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center'
   },
-  noDataImage: {
+  noDataImage: (theme) => ({
     maxWidth: '233px',
-    maxHeight: '240px'
-  },
+    maxHeight: '240px',
+    // Inverting turns the white and navy artwork light/dark; the hue rotation then keeps the orange accents orange.
+    ...theme.applyStyles('dark', {
+      filter: 'invert(1) hue-rotate(180deg)'
+    })
+  }),
   noDataText: {
     fontSize: '1.5rem',
     fontWeight: '600',

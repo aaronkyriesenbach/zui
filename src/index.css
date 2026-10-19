@@ -63,6 +63,15 @@ body {
   background-color: var(--mui-palette-background-default, #f6f7f9);
 }
 
+/* Mirrors darkPalette so the page does not flash light before the theme styles load. */
+html[data-mui-color-scheme='dark'] {
+  color-scheme: dark;
+}
+
+html[data-mui-color-scheme='dark'] body {
+  background-color: var(--mui-palette-background-default, #0b1626);
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }

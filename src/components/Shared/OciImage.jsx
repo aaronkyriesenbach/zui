@@ -24,9 +24,24 @@ export const getConsistentImage = (digest, name) => {
   return imageArray[index];
 };
 
-function OciImage({ digest, name, logo, classes, className, ...props }) {
-  const imageSrc = !isEmpty(logo) ? `data:image/png;base64, ${logo}` : getConsistentImage(digest, name);
-  return <CardMedia classes={classes} className={className} component="img" image={imageSrc} alt="icon" {...props} />;
+// The placeholder cubes are dark blue, so they get lifted on dark surfaces; uploaded logos are left untouched.
+const brightenPlaceholder = (theme) => theme.applyStyles('dark', { filter: 'brightness(1.8)' });
+
+function OciImage({ digest, name, logo, classes, className, sx, ...props }) {
+  const hasLogo = !isEmpty(logo);
+  const imageSrc = hasLogo ? `data:image/png;base64, ${logo}` : getConsistentImage(digest, name);
+  const sxList = Array.isArray(sx) ? sx : [sx];
+  return (
+    <CardMedia
+      classes={classes}
+      className={className}
+      component="img"
+      image={imageSrc}
+      alt="icon"
+      sx={hasLogo ? sxList : [brightenPlaceholder, ...sxList]}
+      {...props}
+    />
+  );
 }
 
 export default OciImage;

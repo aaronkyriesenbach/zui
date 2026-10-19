@@ -16,6 +16,11 @@
   height: 15vh;
 }
 
+/* The loading logo is a single navy shape, so it is flattened to white on dark surfaces. */
+[data-mui-color-scheme='dark'] .App-logo.Loading {
+  filter: brightness(0) invert(1);
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: bounce 1s;

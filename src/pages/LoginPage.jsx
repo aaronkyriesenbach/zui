@@ -4,13 +4,21 @@ import React from 'react';
 // components
 import SignIn from '../components/Login/SignIn';
 
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
+import ThemeModeMenu from 'components/Header/ThemeModeMenu';
 import SigninPresentation from 'components/Login/SignInPresentation';
 import { useState } from 'react';
 import Loading from 'components/Shared/Loading';
 
 const styles = {
+  themeToggle: {
+    position: 'absolute',
+    top: '1rem',
+    right: '1rem',
+    zIndex: 1
+  },
   container: {
+    position: 'relative',
     minHeight: '100vh',
     backgroundColor: 'background.default'
   },
@@ -30,6 +38,9 @@ function LoginPage({ isLoggedIn, setIsLoggedIn }) {
   return (
     <Grid container spacing={0} sx={styles.container} data-testid="login-container">
       {isLoading && <Loading />}
+      <Box sx={styles.themeToggle}>
+        <ThemeModeMenu sx={{ color: 'text.muted' }} />
+      </Box>
       <Grid item xs={1} md={6} className="hide-on-small" sx={isLoading ? styles.loadingHidden : undefined}>
         <SigninPresentation />
       </Grid>

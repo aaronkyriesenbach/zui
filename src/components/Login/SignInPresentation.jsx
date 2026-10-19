@@ -6,7 +6,7 @@ import logoWhite from '../../assets/zotLogoWhiteHorizontal.svg';
 
 const styles = {
   container: {
-    backgroundColor: 'secondary.main',
+    backgroundColor: 'header.background',
     minHeight: '100%',
     width: '100%',
     display: 'flex',

@@ -1,6 +1,7 @@
 import { isNil } from 'lodash';
 import { host } from '../host';
 import { api, endpoints } from '../api';
+import { COLOR_MODE_STORAGE_KEY } from 'theme/colorMode';
 
 const getCookie = (name) => document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`))?.at(2);
 
@@ -31,10 +32,19 @@ const extractEndSessionUrl = (response) => {
   }
 };
 
+// The color mode is a device preference, not session state, so it outlives logout.
+const clearSessionStorage = () => {
+  const colorMode = localStorage.getItem(COLOR_MODE_STORAGE_KEY);
+  localStorage.clear();
+  if (colorMode !== null) {
+    localStorage.setItem(COLOR_MODE_STORAGE_KEY, colorMode);
+  }
+};
+
 const logoutUser = () => {
   const finishLogout = (endSessionUrl) => {
     deleteCookie('user');
-    localStorage.clear();
+    clearSessionStorage();
     window.location.replace(endSessionUrl || '/login');
   };
 

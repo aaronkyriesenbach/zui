@@ -1,5 +1,6 @@
 import { api } from '../../api';
 import { logoutUser } from '../authUtilities';
+import { COLOR_MODE_STORAGE_KEY } from 'theme/colorMode';
 
 describe('authUtilities', () => {
   describe('logoutUser', () => {
@@ -28,6 +29,16 @@ describe('authUtilities', () => {
       await logoutUser();
 
       expect(replaceMock).toHaveBeenCalledWith(endSessionUrl);
+    });
+
+    it('keeps the color mode preference when clearing the session', async () => {
+      localStorage.setItem(COLOR_MODE_STORAGE_KEY, 'dark');
+      jest.spyOn(api, 'post').mockResolvedValue({ data: {} });
+
+      await logoutUser();
+
+      expect(localStorage.getItem(COLOR_MODE_STORAGE_KEY)).toBe('dark');
+      expect(localStorage.getItem('authConfig')).toBeNull();
     });
 
     it('falls back to /login when endSessionUrl is malformed', async () => {

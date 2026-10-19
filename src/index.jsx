@@ -9,6 +9,7 @@ import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon';
 import { createRoot } from 'react-dom/client';
 
 import theme from 'theme';
+import { COLOR_MODE_STORAGE_KEY } from 'theme/colorMode';
 
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -16,7 +17,7 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme} modeStorageKey={COLOR_MODE_STORAGE_KEY} noSsr>
         <LocalizationProvider dateAdapter={AdapterLuxon}>
           <App />
         </LocalizationProvider>

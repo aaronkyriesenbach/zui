@@ -8,6 +8,7 @@ import { isAuthenticated, isAuthenticationEnabled, logoutUser } from '../../util
 import { AppBar, Toolbar, Grid, Button, Box } from '@mui/material';
 import SearchSuggestion from './SearchSuggestion';
 import UserAccountMenu from './UserAccountMenu';
+import ThemeModeMenu from './ThemeModeMenu';
 // styling
 import logo from '../../assets/zotLogoWhite.svg';
 import logoxs from '../../assets/zotLogoWhiteSmall.svg';
@@ -148,6 +149,9 @@ function Header({ setSearchCurrentValue = () => {} }) {
               >
                 <Box component="img" alt="github repository" src={githubLogo} sx={styles.logo} />
               </Box>
+            </Grid>
+            <Grid item>
+              <ThemeModeMenu sx={{ color: 'text.onBrand' }} />
             </Grid>
             {isAuthenticated() && isAuthenticationEnabled() && (
               <Grid item>

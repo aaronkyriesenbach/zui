@@ -1,11 +1,22 @@
 import { createTheme } from '@mui/material/styles';
 
-import { lightPalette } from './palette';
+import { darkPalette, lightPalette } from './palette';
 
 const theme = createTheme({
-  cssVariables: true,
+  cssVariables: { colorSchemeSelector: '[data-mui-color-scheme="%s"]' },
   colorSchemes: {
-    light: { palette: lightPalette }
+    light: { palette: lightPalette },
+    dark: { palette: darkPalette }
+  },
+  components: {
+    MuiPaper: {
+      styleOverrides: {
+        root: ({ theme: paperTheme }) =>
+          paperTheme.applyStyles('dark', {
+            backgroundImage: 'none'
+          })
+      }
+    }
   }
 });
 
