@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
 import {
   Dialog,
   DialogContent,
@@ -13,12 +12,8 @@ import {
 } from '@mui/material';
 import { sortByCriteria } from 'utilities/sortCriteria.js';
 
-const useStyles = makeStyles(() => ({}));
-
 function FilterDialog(props) {
   const { open, setOpen, sortValue, setSortValue, renderFilterCards } = props;
-
-  const classes = useStyles();
 
   const handleSortChange = (event) => {
     setSortValue(event.target.value);
@@ -33,7 +28,7 @@ function FilterDialog(props) {
       <DialogTitle>Filter</DialogTitle>
       <DialogContent>
         <DialogContentText>Sort results</DialogContentText>
-        <FormControl sx={{ m: '1', width: '80%' }} className={`${classes.sortForm}`} size="small">
+        <FormControl sx={{ m: '1', width: '80%' }} size="small">
           <Select label="Sort" value={sortValue} onChange={handleSortChange} MenuProps={{ disableScrollLock: true }}>
             {Object.values(sortByCriteria).map((el) => (
               <MenuItem key={el.value} value={el.value}>

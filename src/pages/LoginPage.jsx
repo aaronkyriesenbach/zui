@@ -4,16 +4,15 @@ import React from 'react';
 // components
 import SignIn from '../components/Login/SignIn';
 
-import makeStyles from '@mui/styles/makeStyles';
 import { Grid } from '@mui/material';
 import SigninPresentation from 'components/Login/SignInPresentation';
 import { useState } from 'react';
 import Loading from 'components/Shared/Loading';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   container: {
     minHeight: '100vh',
-    backgroundColor: '#F6F7F9'
+    backgroundColor: 'background.default'
   },
   signinContainer: {
     display: 'flex',
@@ -23,25 +22,18 @@ const useStyles = makeStyles(() => ({
   loadingHidden: {
     display: 'none'
   }
-}));
+};
 
 function LoginPage({ isLoggedIn, setIsLoggedIn }) {
   const [isLoading, setIsLoading] = useState(true);
-  const classes = useStyles();
 
   return (
-    <Grid container spacing={0} className={classes.container} data-testid="login-container">
+    <Grid container spacing={0} sx={styles.container} data-testid="login-container">
       {isLoading && <Loading />}
-      <Grid item xs={1} md={6} className={`${isLoading ? classes.loadingHidden : ''} hide-on-small`}>
+      <Grid item xs={1} md={6} className="hide-on-small" sx={isLoading ? styles.loadingHidden : undefined}>
         <SigninPresentation />
       </Grid>
-      <Grid
-        item
-        xs={12}
-        sm={12}
-        md={6}
-        className={`${classes.signinContainer} ${isLoading ? classes.loadingHidden : ''}`}
-      >
+      <Grid item xs={12} sm={12} md={6} sx={[styles.signinContainer, isLoading && styles.loadingHidden]}>
         <SignIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} wrapperSetLoading={setIsLoading} />
       </Grid>
     </Grid>

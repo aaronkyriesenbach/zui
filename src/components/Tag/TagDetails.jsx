@@ -31,11 +31,11 @@ import IsDependentOn from './Tabs/IsDependentOn';
 import Loading from '../Shared/Loading';
 import { VulnerabilityIconCheck, SignatureIconCheck } from 'utilities/vulnerabilityAndSignatureCheck';
 import ReferredBy from './Tabs/ReferredBy';
-import makeStyles from '@mui/styles/makeStyles';
 
 import OciImage from '../Shared/OciImage';
+import { paletteColor } from 'theme/styles';
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   pageWrapper: {
     backgroundColor: 'transparent',
     display: 'flex',
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
   repoName: {
     fontWeight: '600',
     fontSize: '1.5rem',
-    color: theme.palette.secondary.main,
+    color: 'text.heading',
     textAlign: 'left'
   },
   avatar: {
@@ -52,17 +52,17 @@ const useStyles = makeStyles((theme) => ({
     width: '1.438rem',
     objectFit: 'fill'
   },
-  digest: {
+  digest: (theme) => ({
     textAlign: 'left',
     fontSize: '1rem',
     lineHeight: '1.5rem',
-    color: '#52637A',
+    color: 'text.muted',
     maxWidth: '100%',
     [theme.breakpoints.down('md')]: {
       padding: '0.5rem 0 0 0',
       fontSize: '0.5rem'
     }
-  },
+  }),
   media: {
     borderRadius: '3.125em'
   },
@@ -75,9 +75,10 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '0.375rem'
   },
   tabsButtons: {
-    backgroundColor: '#F6F7F9',
-    color: '#656C75',
-    border: '2px solid #E0E5EB',
+    backgroundColor: 'background.default',
+    color: 'text.tabInactive',
+    border: '2px solid',
+    borderColor: 'border.main',
     borderRadius: '0.375rem',
     padding: '0.313rem 0.75rem',
     textTransform: 'none',
@@ -85,24 +86,19 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '0.875rem',
     marginLeft: '0!important',
     '&.Mui-selected': {
-      backgroundColor: 'rgba(15, 33, 57, 0.05)',
-      color: theme.palette.secondary.main,
-      border: '2px solid #0F2139!important'
+      backgroundColor: 'background.selected',
+      color: 'text.heading',
+      border: '2px solid !important',
+      borderColor: paletteColor('text.heading', true)
     }
   },
-  tabContent: {
-    height: '100%',
-    [theme.breakpoints.down('md')]: {
-      padding: '0'
-    }
-  },
-  metadata: {
+  metadata: (theme) => ({
     paddingLeft: '1.25rem',
     [theme.breakpoints.down('md')]: {
       marginTop: '1rem',
       paddingLeft: '0'
     }
-  },
+  }),
   cardContent: {
     paddingBottom: '1rem'
   },
@@ -113,13 +109,13 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: 'none!important',
     borderRadius: '0.75rem'
   },
-  header: {
+  header: (theme) => ({
     letterSpacing: '-0.01rem',
     [theme.breakpoints.down('md')]: {
       padding: '0'
     }
-  }
-}));
+  })
+};
 
 const NON_ARTIFACT_CONFIG_MEDIA_TYPES = new Set([
   'application/vnd.oci.image.config.v1+json',
@@ -142,8 +138,6 @@ function TagDetails() {
   const { reponame: rawReponame, tag: rawTag } = useParams();
   const reponame = decodeRouteParam(rawReponame);
   const tag = decodeRouteParam(rawTag);
-
-  const classes = useStyles();
 
   useEffect(() => {
     // if same-page navigation because of tag update, following 2 lines help ux
@@ -260,12 +254,12 @@ function TagDetails() {
       {isLoading ? (
         <Loading />
       ) : (
-        <Grid container className={classes.pageWrapper}>
+        <Grid container sx={styles.pageWrapper}>
           <Grid item xs={12} md={12}>
-            <Card className={classes.cardRoot}>
-              <CardContent className={classes.cardContent}>
+            <Card sx={styles.cardRoot}>
+              <CardContent sx={styles.cardContent}>
                 <Grid container>
-                  <Grid item xs={12} md={9} className={classes.header}>
+                  <Grid item xs={12} md={9} sx={styles.header}>
                     <Stack
                       alignItems="center"
                       sx={{ width: { xs: '100%', md: 'auto' }, marginBottom: '1rem' }}
@@ -274,15 +268,12 @@ function TagDetails() {
                     >
                       <Stack alignItems="center" sx={{ width: { xs: '100%', md: 'auto' } }} direction="row" spacing={1}>
                         <OciImage
-                          classes={{
-                            root: classes.media,
-                            img: classes.avatar
-                          }}
+                          sx={[styles.media, styles.avatar]}
                           digest={imageDetailData?.digest}
                           name={imageDetailData?.name}
                           logo={imageDetailData?.logo}
                         />
-                        <Typography variant="h4" className={classes.repoName}>
+                        <Typography variant="h4" sx={styles.repoName}>
                           <span className="hide-on-mobile">{reponame}</span>:{tag}
                         </Typography>
                       </Stack>
@@ -297,7 +288,7 @@ function TagDetails() {
                     </Stack>
                     {imageDetailData?.manifests && imageDetailData.manifests.length > 0 && (
                       <Stack direction="row" alignItems="center" spacing="1rem">
-                        <FormControl sx={{ m: '1', minWidth: '4.6875rem' }} className={classes.sortForm} size="small">
+                        <FormControl sx={{ m: '1', minWidth: '4.6875rem' }} size="small">
                           <InputLabel>OS/Arch</InputLabel>
                           {!isEmpty(selectedManifest) && (
                             <Select
@@ -314,11 +305,11 @@ function TagDetails() {
                             </Select>
                           )}
                         </FormControl>
-                        <Typography gutterBottom className={classes.digest}>
+                        <Typography gutterBottom sx={styles.digest}>
                           Digest: {selectedManifest?.digest}
                         </Typography>
                         {isArtifact && (
-                          <Typography gutterBottom className={classes.digest} data-testid="artifact-type-inline">
+                          <Typography gutterBottom sx={styles.digest} data-testid="artifact-type-inline">
                             Artifact Type: {artifactType}
                           </Typography>
                         )}
@@ -329,47 +320,41 @@ function TagDetails() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={12} className={classes.tabsContainer}>
+          <Grid item xs={12} md={12} sx={styles.tabsContainer}>
             <ToggleButtonGroup
               color="primary"
-              classes={{
-                root: classes.tabs,
-                grouped: classes.tabsButtons
-              }}
+              sx={styles.tabs}
               value={selectedTab}
               exclusive
               onChange={handleTabChange}
               aria-label="Tabs"
               disabled={isLoading}
             >
-              <ToggleButton value="Layers" role="tab">
+              <ToggleButton sx={styles.tabsButtons} value="Layers" role="tab">
                 Layers
               </ToggleButton>
-              <ToggleButton value="DependsOn" role="tab" data-testid="dependencies-tab">
+              <ToggleButton sx={styles.tabsButtons} value="DependsOn" role="tab" data-testid="dependencies-tab">
                 Uses
               </ToggleButton>
-              <ToggleButton value="IsDependentOn" role="tab">
+              <ToggleButton sx={styles.tabsButtons} value="IsDependentOn" role="tab">
                 Used by
               </ToggleButton>
-              <ToggleButton value="Vulnerabilities" role="tab">
+              <ToggleButton sx={styles.tabsButtons} value="Vulnerabilities" role="tab">
                 Vulnerabilities
               </ToggleButton>
-              <ToggleButton value="ReferredBy" role="tab">
+              <ToggleButton sx={styles.tabsButtons} value="ReferredBy" role="tab">
                 Referred by
               </ToggleButton>
             </ToggleButtonGroup>
           </Grid>
           <Grid item xs={12} md={8}>
-            <Card className={classes.cardRoot}>
-              <CardContent
-                key={`card_content_manifest_key_${selectedManifest?.digest}`}
-                className={classes.tabCardContent}
-              >
+            <Card sx={styles.cardRoot}>
+              <CardContent key={`card_content_manifest_key_${selectedManifest?.digest}`} sx={styles.tabCardContent}>
                 {renderTabContent()}
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={4} className={classes.metadata}>
+          <Grid item xs={12} md={4} sx={styles.metadata}>
             <TagDetailsMetadata
               platform={getPlatform()}
               size={selectedManifest?.size}

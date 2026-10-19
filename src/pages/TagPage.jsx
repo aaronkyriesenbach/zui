@@ -3,27 +3,23 @@ import React from 'react';
 
 // components
 
-import makeStyles from '@mui/styles/makeStyles';
 import { Container, Grid, Stack } from '@mui/material';
 import Header from 'components/Header/Header';
 import TagDetails from 'components/Tag/TagDetails';
 import ExploreHeader from 'components/Header/ExploreHeader';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   pageWrapper: {
     height: '100%',
     display: 'flex',
     flexFlow: 'column'
   },
   container: {
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: '5px',
+    paddingBottom: '5px',
     display: 'flex',
     flexFlow: 'column',
     height: '100%'
-  },
-  parentWrapper: {
-    height: '100vh'
   },
   gridWrapper: {
     backgroundColor: 'transparent',
@@ -32,17 +28,15 @@ const useStyles = makeStyles(() => ({
     flexFlow: 'column',
     height: '100%'
   }
-}));
+};
 
 function TagPage() {
-  const classes = useStyles();
-
   return (
-    <Stack direction="column" className={classes.pageWrapper} data-testid="tag-container">
+    <Stack direction="column" sx={styles.pageWrapper} data-testid="tag-container">
       <Header />
-      <Container className={classes.container}>
+      <Container sx={styles.container}>
         <ExploreHeader />
-        <Grid container className={classes.gridWrapper}>
+        <Grid container sx={styles.gridWrapper}>
           <Grid item xs={12}>
             <TagDetails />
           </Grid>

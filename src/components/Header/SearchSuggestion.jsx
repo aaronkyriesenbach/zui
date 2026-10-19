@@ -1,5 +1,4 @@
-import { Avatar, InputBase, List, ListItem, Stack, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Avatar, Box, InputBase, List, ListItem, Stack, Typography } from '@mui/material';
 import PhotoIcon from '@mui/icons-material/Photo';
 import SearchIcon from '@mui/icons-material/Search';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -10,34 +9,37 @@ import { createSearchParams, useNavigate, useSearchParams } from 'react-router';
 import { debounce, isEmpty } from 'lodash';
 import { useCombobox } from 'downshift';
 import { HEADER_SEARCH_PAGE_SIZE } from 'utilities/paginationConstants';
+import { cardShadow } from 'theme/styles';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   searchContainer: {
     display: 'inline-block',
-    backgroundColor: '#2B3A4E',
-    boxShadow: '0 0.313rem 0.625rem rgba(131, 131, 131, 0.08)',
+    backgroundColor: 'header.inputBackground',
+    boxShadow: cardShadow,
     borderRadius: '0.625rem',
     minWidth: '100%',
     position: 'relative',
     zIndex: 1150
   },
   searchContainerFocused: {
-    backgroundColor: '#FFFFFF'
+    backgroundColor: 'background.paper'
   },
   search: {
     position: 'relative',
     flexDirection: 'row',
-    boxShadow: '0rem 0.3125rem 0.625rem rgba(131, 131, 131, 0.08)',
-    border: '0.063rem solid #8A96A8',
+    boxShadow: cardShadow,
+    border: '0.063rem solid',
+    borderColor: 'header.inputBorder',
     borderRadius: '0.625rem',
     zIndex: 1155
   },
   searchFocused: {
-    border: '0.125rem solid #E0E5EB',
-    backgroundColor: '#FFFFF'
+    border: '0.125rem solid',
+    borderColor: 'border.main'
   },
   searchFailed: {
-    border: '0.125rem solid #ff0303'
+    border: '0.125rem solid',
+    borderColor: '#ff0303'
   },
   resultsWrapper: {
     margin: '0',
@@ -46,52 +48,51 @@ const useStyles = makeStyles(() => ({
     position: 'absolute',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#2B3A4E',
-    boxShadow: '0rem 0.3125rem 0.625rem rgba(131, 131, 131, 0.08)',
+    backgroundColor: 'header.inputBackground',
+    boxShadow: cardShadow,
     borderBottomLeftRadius: '0.625rem',
     borderBottomRightRadius: '0.625rem',
-    // border: '0.125rem solid #E7E7E7',
     borderTop: 0,
     width: '100%',
     overflowY: 'auto',
     zIndex: 1
   },
   resultsWrapperFocused: {
-    backgroundColor: '#FFFFFF'
+    backgroundColor: 'background.paper'
   },
   resultsWrapperHidden: {
     display: 'none'
   },
   searchIcon: {
-    color: '#52637A',
+    color: 'text.muted',
     paddingRight: '3%',
     cursor: 'pointer'
   },
   input: {
-    marginLeft: 1,
+    marginLeft: '1px',
     width: '90%',
-    paddingLeft: 10,
+    paddingLeft: '10px',
     height: '40px',
     fontSize: '1rem',
-    backgroundColor: '#2B3A4E',
+    backgroundColor: 'header.inputBackground',
     borderRadius: '0.625rem',
-    color: '#8A96A8'
+    color: 'header.inputText'
   },
   inputFocused: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'background.paper',
     borderRadius: '0.625rem',
-    color: 'rgba(0, 0, 0, 0.6);'
+    color: 'text.secondary'
   },
   searchItem: {
     alignItems: 'center',
     justifyContent: 'flex-start',
-    color: '#000000',
+    color: 'text.contrast',
     height: '2.75rem',
     padding: '0 5%',
     cursor: 'pointer'
   },
   searchItemIconBg: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'background.paper',
     height: '1.5rem',
     width: '1.5rem',
     display: 'flex',
@@ -99,13 +100,18 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     overflow: 'hidden'
   },
+  searchHint: {
+    color: 'text.muted',
+    fontSize: '1rem',
+    textOverflow: 'ellipsis'
+  },
   searchItemIcon: {
-    color: '#0000008A',
+    color: 'action.active',
     minHeight: '100%',
     minWidth: '100%',
     objectFit: 'fill'
   }
-}));
+};
 
 function SearchSuggestion({ setSearchCurrentValue = () => {} }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -117,8 +123,6 @@ function SearchSuggestion({ setSearchCurrentValue = () => {} }) {
   const [isComponentFocused, setIsComponentFocused] = useState(false);
   const navigate = useNavigate();
   const abortController = useMemo(() => new AbortController(), []);
-
-  const classes = useStyles();
 
   const handleSuggestionSelected = (event) => {
     const name = event.selectedItem?.name;
@@ -252,21 +256,17 @@ function SearchSuggestion({ setSearchCurrentValue = () => {} }) {
     return suggestionData.map((suggestion, index) => (
       <ListItem
         key={`${suggestion.name}_${index}`}
-        className={classes.searchItem}
-        style={highlightedIndex === index ? { backgroundColor: '#F6F7F9' } : {}}
+        sx={[styles.searchItem, highlightedIndex === index && { backgroundColor: 'background.default' }]}
         {...getItemProps({ item: suggestion, index })}
         spacing={2}
       >
         <Stack direction="row" spacing={2}>
           <Avatar
             variant="square"
-            classes={{
-              root: classes.searchItemIconBg,
-              img: classes.searchItemIcon
-            }}
+            sx={[styles.searchItemIconBg, { '& .MuiAvatar-img': styles.searchItemIcon }]}
             src={suggestion.logo ? `data:image/png;base64, ${suggestion.logo}` : ''}
           >
-            <PhotoIcon className={classes.searchItemIcon} />
+            <PhotoIcon sx={styles.searchItemIcon} />
           </Avatar>
           <Typography>{suggestion.name}</Typography>
         </Stack>
@@ -275,11 +275,13 @@ function SearchSuggestion({ setSearchCurrentValue = () => {} }) {
   };
 
   return (
-    <div className={`${classes.searchContainer} ${isComponentFocused && classes.searchContainerFocused}`}>
+    <Box sx={[styles.searchContainer, isComponentFocused && styles.searchContainerFocused]}>
       <Stack
-        className={`${classes.search} ${isComponentFocused && classes.searchFocused} ${
-          isFailedSearch && !isLoading && classes.searchFailed
-        }`}
+        sx={[
+          styles.search,
+          isComponentFocused && styles.searchFocused,
+          isFailedSearch && !isLoading && styles.searchFailed
+        ]}
         direction="row"
         alignItems="center"
         justifyContent="space-between"
@@ -288,33 +290,31 @@ function SearchSuggestion({ setSearchCurrentValue = () => {} }) {
       >
         <InputBase
           placeholder={'Search for content...'}
-          className={`${classes.input} ${isComponentFocused && classes.inputFocused}`}
-          sx={{ input: { '&::placeholder': { opacity: 1 } } }}
+          sx={[
+            styles.input,
+            isComponentFocused && styles.inputFocused,
+            { input: { '&::placeholder': { opacity: 1 } } }
+          ]}
           onKeyUp={handleSearch}
           onFocus={() => openMenu()}
           {...getInputProps()}
         />
-        <div onClick={handleSearch} className={classes.searchIcon}>
+        <Box onClick={handleSearch} sx={styles.searchIcon}>
           <SearchIcon />
-        </div>
+        </Box>
       </Stack>
       <List
         {...getMenuProps()}
-        className={
+        sx={
           isOpen && !isFailedSearch
-            ? `${classes.resultsWrapper} ${isComponentFocused && classes.resultsWrapperFocused}`
-            : classes.resultsWrapperHidden
+            ? [styles.resultsWrapper, isComponentFocused && styles.resultsWrapperFocused]
+            : styles.resultsWrapperHidden
         }
       >
         {isOpen && suggestionData?.length > 0 && renderSuggestions()}
         {isOpen && isLoading && !isEmpty(searchQuery) && isEmpty(suggestionData) && (
           <>
-            <ListItem
-              className={classes.searchItem}
-              style={{ color: '#52637A', fontSize: '1rem', textOverflow: 'ellipsis' }}
-              {...getItemProps({ item: '', index: 0 })}
-              spacing={2}
-            >
+            <ListItem sx={[styles.searchItem, styles.searchHint]} {...getItemProps({ item: '', index: 0 })} spacing={2}>
               <Stack direction="row" spacing={2}>
                 <Typography>Loading...</Typography>
               </Stack>
@@ -324,8 +324,7 @@ function SearchSuggestion({ setSearchCurrentValue = () => {} }) {
         {isOpen && isEmpty(searchQuery) && isEmpty(suggestionData) && (
           <>
             <ListItem
-              className={classes.searchItem}
-              style={{ color: '#52637A', fontSize: '1rem', textOverflow: 'ellipsis' }}
+              sx={[styles.searchItem, styles.searchHint]}
               {...getItemProps({ item: '', index: 0 })}
               spacing={2}
               onClick={() => {}}
@@ -335,8 +334,7 @@ function SearchSuggestion({ setSearchCurrentValue = () => {} }) {
               </Stack>
             </ListItem>
             <ListItem
-              className={classes.searchItem}
-              style={{ color: '#52637A', fontSize: '1rem', textOverflow: 'ellipsis' }}
+              sx={[styles.searchItem, styles.searchHint]}
               {...getItemProps({ item: '', index: 0 })}
               spacing={2}
               onClick={() => {}}
@@ -348,7 +346,7 @@ function SearchSuggestion({ setSearchCurrentValue = () => {} }) {
           </>
         )}
       </List>
-    </div>
+    </Box>
   );
 }
 

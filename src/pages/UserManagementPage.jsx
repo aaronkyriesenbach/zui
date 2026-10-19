@@ -9,29 +9,27 @@ import { Container, Grid, Stack } from '@mui/material';
 import Header from '../components/Header/Header.jsx';
 import ApiKeys from '../components/User/ApiKeys/ApiKeys.jsx';
 
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles(() => ({
+const styles = {
   container: {
-    paddingTop: 30,
-    paddingBottom: 5,
+    paddingTop: '30px',
+    paddingBottom: '5px',
     height: '100%',
     minWidth: '60%'
   },
   gridWrapper: {
-    border: '0.0625rem #f2f2f2 dashed'
+    border: '0.0625rem dashed',
+    borderColor: 'border.faint'
   },
   pageWrapper: {
     height: '100%'
   },
   tile: {
     width: '100%',
-    padding: 5
+    padding: '5px'
   }
-}));
+};
 
 function UserManagementPage() {
-  const classes = useStyles();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,11 +39,11 @@ function UserManagementPage() {
   }, []);
 
   return (
-    <Stack className={classes.pageWrapper} direction="column" data-testid="explore-container">
+    <Stack sx={styles.pageWrapper} direction="column" data-testid="explore-container">
       <Header />
-      <Container className={classes.container}>
-        <Grid container className={classes.gridWrapper}>
-          <Grid item className={classes.tile}>
+      <Container sx={styles.container}>
+        <Grid container sx={styles.gridWrapper}>
+          <Grid item sx={styles.tile}>
             <ApiKeys />
           </Grid>
         </Grid>

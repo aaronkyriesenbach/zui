@@ -1,30 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles } from '@mui/styles';
 import { isEmpty } from 'lodash';
 import { Typography, Stack } from '@mui/material';
 import ReferrerCard from '../../Shared/ReferrerCard';
 import Loading from '../../Shared/Loading';
 import { mapReferrer } from 'utilities/objectModels';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   title: {
-    color: 'rgba(0, 0, 0, 0.87)',
+    color: 'text.primary',
     fontSize: '1.5rem',
     fontWeight: '600',
     paddingTop: '0.5rem'
   },
   none: {
-    color: '#52637A',
+    color: 'text.muted',
     fontSize: '1.4rem',
     fontWeight: '600'
   }
-}));
+};
 
 function ReferredBy(props) {
   const { referrers } = props;
   const [referrersData, setReferrersData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const classes = useStyles();
 
   useEffect(() => {
     if (!isEmpty(referrers)) {
@@ -51,13 +49,13 @@ function ReferredBy(props) {
         );
       })
     ) : (
-      <div>{!isLoading && <Typography className={classes.none}> Nothing found </Typography>}</div>
+      <div>{!isLoading && <Typography sx={styles.none}> Nothing found </Typography>}</div>
     );
   };
 
   return (
     <div data-testid="referred-by-container">
-      <Typography variant="h4" gutterBottom component="div" align="left" className={classes.title}>
+      <Typography variant="h4" gutterBottom component="div" align="left" sx={styles.title}>
         Referred By
       </Typography>
       <Stack direction="column" spacing={2}>

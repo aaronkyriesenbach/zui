@@ -7,16 +7,14 @@ import { Markdown } from 'utilities/MarkdowntojsxWrapper';
 import { Card, CardContent, Grid, Typography, Tooltip } from '@mui/material';
 import PullCommandButton from 'components/Shared/PullCommandButton';
 
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles((theme) => ({
+const styles = {
   card: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'start',
-    background: '#FFFFFF',
+    backgroundColor: 'background.paper',
     borderRadius: '0.5rem',
-    borderColor: '#FFFFFF',
+    borderColor: 'background.paper',
     flex: 'none',
     alignSelf: 'stretch',
     flexGrow: 0,
@@ -30,10 +28,10 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   metadataHeader: {
-    color: theme.palette.secondary.dark
+    color: 'text.muted'
   },
   metadataBody: {
-    color: theme.palette.primary.main,
+    color: 'text.strong',
     fontFamily: 'Roboto',
     fontStyle: 'normal',
     fontWeight: 400,
@@ -48,10 +46,9 @@ const useStyles = makeStyles((theme) => ({
       paddingBottom: '0'
     }
   }
-}));
+};
 
 function TagDetailsMetadata(props) {
-  const classes = useStyles();
   const { platform, lastUpdated, lastTagged, size, license, imageName, isArtifact } = props;
 
   const lastDate = lastUpdated
@@ -64,32 +61,32 @@ function TagDetailsMetadata(props) {
 
   return (
     <Grid container spacing={'1rem'} data-testid="tagDetailsMetadata-container">
-      <Grid item xs={12} className={`hide-on-mobile`}>
-        <Card variant="outlined" className={classes.card}>
-          <CardContent className={`${classes.cardContent} ${classes.pullImageContent}`}>
+      <Grid item xs={12} className="hide-on-mobile">
+        <Card variant="outlined" sx={styles.card}>
+          <CardContent sx={[styles.cardContent, styles.pullImageContent]}>
             <PullCommandButton imageName={imageName || ''} isArtifact={isArtifact} />
           </CardContent>
         </Card>
       </Grid>
       <Grid item xs={12}>
-        <Card variant="outlined" className={classes.card}>
-          <CardContent className={classes.cardContent}>
-            <Typography variant="body2" align="left" className={classes.metadataHeader}>
+        <Card variant="outlined" sx={styles.card}>
+          <CardContent sx={styles.cardContent}>
+            <Typography variant="body2" align="left" sx={styles.metadataHeader}>
               OS/Arch
             </Typography>
-            <Typography variant="body1" className={classes.metadataBody}>
+            <Typography variant="body1" sx={styles.metadataBody}>
               {platform?.Os || `----`} / {platform?.Arch || `----`}
             </Typography>
           </CardContent>
         </Card>
       </Grid>
       <Grid item xs={12}>
-        <Card variant="outlined" className={classes.card}>
-          <CardContent className={classes.cardContent}>
-            <Typography variant="body2" align="left" className={classes.metadataHeader}>
+        <Card variant="outlined" sx={styles.card}>
+          <CardContent sx={styles.cardContent}>
+            <Typography variant="body2" align="left" sx={styles.metadataHeader}>
               Total Size
             </Typography>
-            <Typography variant="body1" align="left" className={classes.metadataBody}>
+            <Typography variant="body1" align="left" sx={styles.metadataBody}>
               {transform.formatBytes(size) || `----`}
             </Typography>
           </CardContent>
@@ -97,13 +94,13 @@ function TagDetailsMetadata(props) {
       </Grid>
       <Grid container item xs={12} spacing={2}>
         <Grid item xs={12}>
-          <Card variant="outlined" className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <Typography variant="body2" align="left" className={classes.metadataHeader}>
+          <Card variant="outlined" sx={styles.card}>
+            <CardContent sx={styles.cardContent}>
+              <Typography variant="body2" align="left" sx={styles.metadataHeader}>
                 Created
               </Typography>
               <Tooltip title={lastUpdated?.slice(0, 16) || ' '} placement="top">
-                <Typography variant="body1" align="left" className={classes.metadataBody}>
+                <Typography variant="body1" align="left" sx={styles.metadataBody}>
                   {lastDate}
                 </Typography>
               </Tooltip>
@@ -111,13 +108,13 @@ function TagDetailsMetadata(props) {
           </Card>
         </Grid>
         <Grid item xs={12}>
-          <Card variant="outlined" className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <Typography variant="body2" align="left" className={classes.metadataHeader}>
+          <Card variant="outlined" sx={styles.card}>
+            <CardContent sx={styles.cardContent}>
+              <Typography variant="body2" align="left" sx={styles.metadataHeader}>
                 Last Tagged
               </Typography>
               <Tooltip title={lastTagged?.slice(0, 16) || ' '} placement="top">
-                <Typography variant="body1" align="left" className={classes.metadataBody}>
+                <Typography variant="body1" align="left" sx={styles.metadataBody}>
                   {lastTaggedDate}
                 </Typography>
               </Tooltip>
@@ -127,13 +124,13 @@ function TagDetailsMetadata(props) {
       </Grid>
       <Grid container item xs={12} spacing={2}>
         <Grid item xs={12}>
-          <Card variant="outlined" className={classes.card}>
-            <CardContent className={classes.cardContent}>
-              <Typography variant="body2" align="left" className={classes.metadataHeader}>
+          <Card variant="outlined" sx={styles.card}>
+            <CardContent sx={styles.cardContent}>
+              <Typography variant="body2" align="left" sx={styles.metadataHeader}>
                 License
               </Typography>
               <Tooltip title={license || ' '} placement="top">
-                <Typography variant="body1" align="left" className={classes.metadataBody}>
+                <Typography variant="body1" align="left" sx={styles.metadataBody}>
                   {license ? <Markdown>{license}</Markdown> : `License info not available`}
                 </Typography>
               </Tooltip>

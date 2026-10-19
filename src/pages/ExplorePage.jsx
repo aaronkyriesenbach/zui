@@ -2,40 +2,39 @@
 import React from 'react';
 import Header from '../components/Header/Header.jsx';
 
-import makeStyles from '@mui/styles/makeStyles';
 import { Container, Grid, Stack } from '@mui/material';
 import Explore from 'components/Explore/Explore.jsx';
 import { useState } from 'react';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   container: {
-    paddingTop: 30,
-    paddingBottom: 5,
+    paddingTop: '30px',
+    paddingBottom: '5px',
     height: '100%',
     minWidth: '60%'
   },
   gridWrapper: {
-    border: '0.0625rem #f2f2f2 dashed'
+    border: '0.0625rem dashed',
+    borderColor: 'border.faint'
   },
   pageWrapper: {
     height: '100%'
   },
   tile: {
     width: '100%',
-    padding: 5
+    padding: '5px'
   }
-}));
+};
 
 function ExplorePage() {
-  const classes = useStyles();
   const [searchCurrentValue, setSearchCurrentValue] = useState();
 
   return (
-    <Stack className={classes.pageWrapper} direction="column" data-testid="explore-container">
+    <Stack sx={styles.pageWrapper} direction="column" data-testid="explore-container">
       <Header setSearchCurrentValue={setSearchCurrentValue} />
-      <Container className={classes.container}>
-        <Grid container className={classes.gridWrapper}>
-          <Grid item className={classes.tile}>
+      <Container sx={styles.container}>
+        <Grid container sx={styles.gridWrapper}>
+          <Grid item sx={styles.tile}>
             <Explore searchInputValue={searchCurrentValue} />
           </Grid>
         </Grid>

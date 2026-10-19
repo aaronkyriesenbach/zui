@@ -28,9 +28,7 @@ import { VulnerabilityIconCheck, SignatureIconCheck } from 'utilities/vulnerabil
 
 import OciImage from '../Shared/OciImage';
 
-import makeStyles from '@mui/styles/makeStyles';
-
-const useStyles = makeStyles((theme) => ({
+const styles = {
   pageWrapper: {
     backgroundColor: 'transparent',
     height: '100%'
@@ -38,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   repoName: {
     fontWeight: '600',
     fontSize: '1.5rem',
-    color: theme.palette.secondary.main,
+    color: 'text.heading',
     textAlign: 'left'
   },
   avatar: {
@@ -46,107 +44,77 @@ const useStyles = makeStyles((theme) => ({
     width: '1.438rem',
     objectFit: 'fill'
   },
-  cardBtn: {
-    height: '100%',
-    width: '100%'
-  },
   media: {
     borderRadius: '3.125em'
   },
-  tags: {
+  tags: (theme) => ({
     marginTop: '1.5rem',
     height: '100%',
     [theme.breakpoints.down('md')]: {
       padding: '0'
     }
-  },
-  metadata: {
+  }),
+  metadata: (theme) => ({
     marginTop: '1.5rem',
     paddingLeft: '1.25rem',
     [theme.breakpoints.down('md')]: {
       marginTop: '1rem',
       paddingLeft: '0'
     }
-  },
-  card: {
-    marginBottom: 2,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    background: '#FFFFFF',
-    border: '0.0625rem solid #E0E5EB',
-    borderRadius: '0.75rem',
-    alignSelf: 'stretch',
-    width: '100%',
-    boxShadow: 'none!important'
-  },
+  }),
   tagsContent: {
     padding: '1.5rem'
-  },
-  platformText: {
-    backgroundColor: '#EDE7F6',
-    color: '#220052',
-    fontWeight: '400',
-    fontSize: '0.8125rem',
-    lineHeight: '1.125rem',
-    letterSpacing: '0.01rem'
-  },
-  inputForm: {
-    textAlign: 'left',
-    '& fieldset': {
-      border: '0.125rem solid #52637A'
-    }
   },
   cardRoot: {
     boxShadow: 'none!important'
   },
-  header: {
+  header: (theme) => ({
     [theme.breakpoints.down('md')]: {
       padding: '0'
     }
-  },
-  repoTitle: {
+  }),
+  repoTitle: (theme) => ({
     textAlign: 'left',
     fontSize: '1rem',
     lineHeight: '1.5rem',
-    color: 'rgba(0, 0, 0, 0.6)',
+    color: 'text.secondary',
     padding: '1rem 0 0 0',
     [theme.breakpoints.down('md')]: {
       padding: '0.5rem 0 0 0'
     }
-  },
-  platformChipsContainer: {
+  }),
+  platformChipsContainer: (theme) => ({
     alignItems: 'center',
     padding: '0.15rem 0 0 0',
     [theme.breakpoints.down('md')]: {
       padding: '0.5rem 0 0 0'
     }
-  },
+  }),
   platformChips: {
-    backgroundColor: '#E0E5EB',
-    color: '#52637A',
+    backgroundColor: 'background.chip',
+    color: 'text.muted',
     fontSize: '0.813rem',
     lineHeight: '0.813rem',
     borderRadius: '0.375rem',
-    padding: '0.313rem 0.625rem'
-  },
-  chipLabel: {
-    padding: '0'
+    padding: '0.313rem 0.625rem',
+    '& .MuiChip-label': {
+      padding: '0'
+    }
   },
   vendor: {
-    color: theme.palette.primary.main,
+    color: 'text.strong',
     fontSize: '0.75rem',
     maxWidth: '50%',
     textOverflow: 'ellipsis',
     lineHeight: '1.125rem'
   },
   versionLast: {
-    color: theme.palette.secondary.dark,
+    color: 'text.muted',
     fontSize: '0.75rem',
     lineHeight: '1.125rem',
     textOverflow: 'ellipsis'
   }
-}));
+};
 
 function RepoDetails() {
   const [repoDetailData, setRepoDetailData] = useState({});
@@ -157,7 +125,6 @@ function RepoDetails() {
   const name = decodeRouteParam(rawName);
   const navigate = useNavigate();
   const abortController = useMemo(() => new AbortController(), []);
-  const classes = useStyles();
 
   useEffect(() => {
     setIsLoading(true);
@@ -205,10 +172,7 @@ function RepoDetails() {
         key={`${name}${platform}${index}`}
         label={platform}
         onClick={handlePlatformChipClick}
-        className={classes.platformChips}
-        classes={{
-          label: classes.chipLabel
-        }}
+        sx={styles.platformChips}
       />
     ));
   };
@@ -275,24 +239,21 @@ function RepoDetails() {
       {isLoading ? (
         <Loading />
       ) : (
-        <Grid container className={classes.pageWrapper}>
+        <Grid container sx={styles.pageWrapper}>
           <Grid item xs={12} md={12}>
-            <Card className={classes.cardRoot}>
+            <Card sx={styles.cardRoot}>
               <CardContent>
-                <Grid container className={classes.header}>
+                <Grid container sx={styles.header}>
                   <Grid item xs={12} md={8}>
                     <Stack alignItems="center" direction={{ xs: 'column', md: 'row' }} spacing={2}>
                       <Stack alignItems="center" sx={{ width: { xs: '100%', md: 'auto' } }} direction="row" spacing={2}>
                         <OciImage
-                          classes={{
-                            root: classes.media,
-                            img: classes.avatar
-                          }}
+                          sx={[styles.media, styles.avatar]}
                           digest={repoDetailData?.digest}
                           name={name}
                           logo={repoDetailData?.logo}
                         />
-                        <Typography variant="h4" className={classes.repoName}>
+                        <Typography variant="h4" sx={styles.repoName}>
                           {name}
                         </Typography>
                       </Stack>
@@ -328,25 +289,25 @@ function RepoDetails() {
                         )}
                       </Stack>
                     </Stack>
-                    <Typography gutterBottom className={classes.repoTitle}>
+                    <Typography gutterBottom sx={styles.repoTitle}>
                       {repoDetailData?.title || 'Title not available'}
                     </Typography>
-                    <Stack direction="row" spacing={1} className={classes.platformChipsContainer}>
+                    <Stack direction="row" spacing={1} sx={styles.platformChipsContainer}>
                       {platformChips()}
                     </Stack>
                     <Stack alignItems="center" direction="row" spacing={1} pt={'0.5rem'}>
                       <Tooltip title={getVendor()} placement="top" className="hide-on-mobile">
-                        <Typography className={classes.vendor} variant="body2" noWrap>
+                        <Typography sx={styles.vendor} variant="body2" noWrap>
                           {<Markdown options={{ forceInline: true }}>{getVendor()}</Markdown>}
                         </Typography>
                       </Tooltip>
                       <Tooltip title={getVersion()} placement="top" className="hide-on-mobile">
-                        <Typography className={classes.versionLast} variant="body2" noWrap>
+                        <Typography sx={styles.versionLast} variant="body2" noWrap>
                           {getVersion()}
                         </Typography>
                       </Tooltip>
                       <Tooltip title={repoDetailData.lastUpdated?.slice(0, 16) || ' '} placement="top">
-                        <Typography className={classes.versionLast} variant="body2" noWrap>
+                        <Typography sx={styles.versionLast} variant="body2" noWrap>
                           {getLast()}
                         </Typography>
                       </Tooltip>
@@ -356,14 +317,14 @@ function RepoDetails() {
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={8} className={classes.tags}>
-            <Card className={classes.cardRoot}>
-              <CardContent className={classes.tagsContent}>
+          <Grid item xs={12} md={8} sx={styles.tags}>
+            <Card sx={styles.cardRoot}>
+              <CardContent sx={styles.tagsContent}>
                 <Tags tags={tags} repoName={name} onTagDelete={handleDeleteTag} />
               </CardContent>
             </Card>
           </Grid>
-          <Grid item xs={12} md={4} className={classes.metadata}>
+          <Grid item xs={12} md={4} sx={styles.metadata}>
             <RepoDetailsMetadata
               totalDownloads={repoDetailData?.downloads}
               repoURL={repoDetailData?.source}

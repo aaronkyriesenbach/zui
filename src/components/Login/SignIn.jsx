@@ -23,9 +23,9 @@ import Loading from '../Shared/Loading';
 import { GoogleLoginButton, GithubLoginButton, GitlabLoginButton, OIDCLoginButton } from './ThirdPartyLoginComponents';
 
 // styling
-import { makeStyles } from '@mui/styles';
+import { cardShadow } from 'theme/styles';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   cardContainer: {
     display: 'flex',
     alignItems: 'center',
@@ -39,8 +39,8 @@ const useStyles = makeStyles(() => ({
     justifyContent: 'center',
     width: '60%',
     height: '60%',
-    background: '#FFFFFF',
-    boxShadow: '0rem 0.3125rem 0.625rem rgba(131, 131, 131, 0.08)',
+    backgroundColor: 'background.paper',
+    boxShadow: cardShadow,
     borderRadius: '0.75rem',
     minWidth: '30rem'
   },
@@ -52,7 +52,7 @@ const useStyles = makeStyles(() => ({
     padding: '3rem'
   },
   text: {
-    color: '#14191F',
+    color: 'text.strong',
     width: '100%',
     fontSize: '1.5rem',
     lineHeight: '2.25rem',
@@ -60,7 +60,7 @@ const useStyles = makeStyles(() => ({
     marginBottom: '0.25rem'
   },
   subtext: {
-    color: '#52637A',
+    color: 'text.muted',
     width: '100%',
     fontSize: '1rem',
     marginBottom: '2.375rem'
@@ -68,21 +68,18 @@ const useStyles = makeStyles(() => ({
   textField: {
     borderRadius: '0.25rem',
     marginTop: 0,
-    marginBottom: '1.5rem'
-  },
-  textColor: {
-    color: '#8596AD'
+    marginBottom: '1.5rem',
+    '& .MuiInputBase-input': {
+      color: 'text.fieldInput'
+    }
   },
   labelColor: {
-    color: '#667C99',
-    '&:focused': {
-      color: '#667C99'
-    }
+    color: 'text.fieldLabel'
   },
   continueButton: {
     textTransform: 'none',
-    background: '#F15527',
-    color: '#FFFFFF',
+    backgroundColor: '#F15527',
+    color: 'common.white',
     fontSize: '1.438rem',
     fontWeight: '600',
     height: '3.125rem',
@@ -98,45 +95,25 @@ const useStyles = makeStyles(() => ({
   },
   continueAsGuestButton: {
     textTransform: 'none',
-    background: '#FFFFFF',
-    color: '#52637A',
+    backgroundColor: 'background.paper',
+    color: 'text.muted',
     fontSize: '1.438rem',
     fontWeight: '600',
     height: '3.125rem',
     borderRadius: '0.25rem',
-    border: '1px solid #52637A',
+    border: '1px solid',
+    borderColor: 'border.strong',
     letterSpacing: '0.01rem',
     marginBottom: '1rem',
     padding: 0,
     boxShadow: 'none',
     '&:hover': {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: 'background.paper',
       boxShadow: 'none'
     }
   },
-  gitLogo: {
-    height: '24px',
-    borderRadius: '0.25rem',
-    paddingLeft: '1rem'
-  },
-  line: {
-    width: '100%',
-    textAlign: 'center',
-    borderBottom: '0.0625rem solid #C2CBD6',
-    lineHeight: '0.1rem',
-    margin: '0.625rem 0 1.25rem'
-  },
-  lineSpan: {
-    background: '#ffffff',
-    color: '#C2CBD6',
-    padding: '0 0.625rem',
-    fontSize: '1rem',
-    fontWeight: '400',
-    paddingLeft: '1rem',
-    paddingRight: '1rem'
-  },
   divider: {
-    color: '#C2CBD6',
+    color: 'text.soft',
     marginBottom: '2rem',
     width: '100%'
   },
@@ -144,7 +121,7 @@ const useStyles = makeStyles(() => ({
     width: '100%',
     marginBottom: '2rem'
   }
-}));
+};
 
 export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = () => {} }) {
   const [usernameError, setUsernameError] = useState(null);
@@ -159,7 +136,6 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = 
   const [isGuestLoginEnabled, setIsGuestLoginEnabled] = useState(false);
   const abortController = useMemo(() => new AbortController(), []);
   const navigate = useNavigate();
-  const classes = useStyles();
 
   useEffect(() => {
     setIsLoading(true);
@@ -315,7 +291,7 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = 
     let oidcName = authMethods.openid?.providers?.oidc?.name;
 
     return (
-      <Stack direction="column" spacing="1rem" className={classes.thirdPartyLoginContainer}>
+      <Stack direction="column" spacing="1rem" sx={styles.thirdPartyLoginContainer}>
         {isGithub && <GithubLoginButton handleClick={handleClickExternalLogin} />}
         {isGoogle && <GoogleLoginButton handleClick={handleClickExternalLogin} />}
         {isGitlab && <GitlabLoginButton handleClick={handleClickExternalLogin} />}
@@ -325,24 +301,24 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = 
   };
 
   return (
-    <div className={classes.cardContainer} data-testid="signin-container">
+    <Box sx={styles.cardContainer} data-testid="signin-container">
       {isLoading ? (
         <Loading />
       ) : (
-        <Card className={classes.loginCard}>
-          <CardContent className={classes.loginCardContent}>
+        <Card sx={styles.loginCard}>
+          <CardContent sx={styles.loginCardContent}>
             <CssBaseline />
-            <Typography align="left" className={classes.text} component="h1" variant="h4">
+            <Typography align="left" sx={styles.text} component="h1" variant="h4">
               Sign In
             </Typography>
-            <Typography align="left" className={classes.subtext} variant="body1" gutterBottom>
+            <Typography align="left" sx={styles.subtext} variant="body1" gutterBottom>
               Welcome back! Please login.
             </Typography>
             {renderThirdPartyLoginMethods()}
             {Object.keys(authMethods).length > 1 &&
               Object.keys(authMethods).includes('openid') &&
               Object.keys(authMethods.openid.providers).length > 0 && (
-                <Divider className={classes.divider} data-testid="openid-divider">
+                <Divider sx={styles.divider} data-testid="openid-divider">
                   or
                 </Divider>
               )}
@@ -355,9 +331,8 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = 
                   id="username"
                   label="Username"
                   name="username"
-                  className={classes.textField}
-                  inputProps={{ className: classes.textColor }}
-                  InputLabelProps={{ className: classes.labelColor }}
+                  sx={styles.textField}
+                  InputLabelProps={{ sx: styles.labelColor }}
                   onInput={(e) => handleChange(e, 'username')}
                   error={usernameError != null}
                   helperText={usernameError}
@@ -371,9 +346,8 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = 
                   label="Enter password"
                   type="password"
                   id="password"
-                  className={classes.textField}
-                  inputProps={{ className: classes.textColor }}
-                  InputLabelProps={{ className: classes.labelColor }}
+                  sx={styles.textField}
+                  InputLabelProps={{ sx: styles.labelColor }}
                   onInput={(e) => handleChange(e, 'password')}
                   error={passwordError != null}
                   helperText={passwordError}
@@ -390,7 +364,7 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = 
                     fullWidth
                     type="button"
                     variant="contained"
-                    className={classes.continueButton}
+                    sx={styles.continueButton}
                     onClick={handleClick}
                     disabled={requestProcessing}
                     data-testid="basic-auth-submit-btn"
@@ -405,7 +379,7 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = 
                 fullWidth
                 type="button"
                 variant="contained"
-                className={classes.continueAsGuestButton}
+                sx={styles.continueAsGuestButton}
                 onClick={handleGuestClick}
               >
                 Continue as guest
@@ -414,6 +388,6 @@ export default function SignIn({ isLoggedIn, setIsLoggedIn, wrapperSetLoading = 
           </CardContent>
         </Card>
       )}
-    </div>
+    </Box>
   );
 }

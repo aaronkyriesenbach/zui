@@ -3,16 +3,12 @@ import React, { useState } from 'react';
 
 // components
 import Typography from '@mui/material/Typography';
-import { Stack, InputBase, FormControl, Select, InputLabel, MenuItem } from '@mui/material';
+import { Box, Stack, InputBase, FormControl, Select, InputLabel, MenuItem } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { makeStyles } from '@mui/styles';
 import TagCard from '../../Shared/TagCard';
 import { tagsSortByCriteria } from 'utilities/sortCriteria';
 
-const useStyles = makeStyles(() => ({
-  clickCursor: {
-    cursor: 'pointer'
-  },
+const styles = {
   search: {
     position: 'relative',
     maxWidth: '100%',
@@ -20,29 +16,29 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     boxShadow: 'none',
-    border: '0.063rem solid #E7E7E7',
+    border: '0.063rem solid',
+    borderColor: 'border.light',
     borderRadius: '0.625rem'
   },
   searchIcon: {
-    color: '#52637A',
+    color: 'text.muted',
     paddingRight: '3%'
   },
   searchInputBase: {
     width: '90%',
     paddingLeft: '1.5rem',
-    height: 40
+    height: '40px'
   },
   input: {
-    color: '#464141',
+    color: 'text.body',
     fontSize: '1rem',
     '&::placeholder': {
       opacity: '1'
     }
   }
-}));
+};
 
 export default function Tags(props) {
-  const classes = useStyles();
   const { tags, repoName, onTagDelete } = props;
   const [tagsFilter, setTagsFilter] = useState('');
   const [sortFilter, setSortFilter] = useState(tagsSortByCriteria.updateTimeDesc.value);
@@ -92,11 +88,11 @@ export default function Tags(props) {
           gutterBottom
           component="div"
           align="left"
-          style={{ color: 'rgba(0, 0, 0, 0.87)', fontSize: '1.5rem', fontWeight: '600' }}
+          sx={{ color: 'text.primary', fontSize: '1.5rem', fontWeight: '600' }}
         >
           Tags History
         </Typography>
-        <FormControl sx={{ m: '1', minWidth: '4.6875rem' }} className={classes.sortForm} size="small">
+        <FormControl sx={{ m: '1', minWidth: '4.6875rem' }} size="small">
           <InputLabel>Sort</InputLabel>
           <Select
             label="Sort"
@@ -112,16 +108,16 @@ export default function Tags(props) {
           </Select>
         </FormControl>
       </Stack>
-      <Stack className={classes.search}>
+      <Stack sx={styles.search}>
         <InputBase
           placeholder={'Search tags...'}
-          classes={{ root: classes.searchInputBase, input: classes.input }}
+          sx={[styles.searchInputBase, { '& .MuiInputBase-input': styles.input }]}
           value={tagsFilter}
           onChange={handleTagsFilterChange}
         />
-        <div className={classes.searchIcon}>
+        <Box sx={styles.searchIcon}>
           <SearchIcon />
-        </div>
+        </Box>
       </Stack>
       {renderTags(tags)}
     </Stack>

@@ -4,6 +4,14 @@ import { api } from 'api';
 import SearchSuggestion from 'components/Header/SearchSuggestion';
 import { MemoryRouter } from 'react-router';
 import React from 'react';
+import MockThemeProvider from '__mocks__/MockThemeProvider';
+
+const renderSearch = () =>
+  render(
+    <MockThemeProvider>
+      <RouterSearchWrapper />
+    </MockThemeProvider>
+  );
 
 // router mock
 const mockedUsedNavigate = jest.fn();
@@ -81,7 +89,7 @@ afterEach(() => {
 describe('Search component', () => {
   it('should display suggestions when user searches', async () => {
     jest.spyOn(api, 'get').mockResolvedValue({ status: 200, data: { data: mockImageList } });
-    render(<RouterSearchWrapper />);
+    renderSearch();
     const searchInput = screen.getByPlaceholderText(/search for content/i);
     expect(searchInput).toBeInTheDocument();
     userEvent.type(searchInput, 'test');
@@ -90,7 +98,7 @@ describe('Search component', () => {
 
   it('should navigate to repo page when a repo suggestion is clicked', async () => {
     jest.spyOn(api, 'get').mockResolvedValue({ status: 200, data: { data: mockImageList } });
-    render(<RouterSearchWrapper />);
+    renderSearch();
     const searchInput = screen.getByPlaceholderText(/search for content/i);
     userEvent.type(searchInput, 'test');
     const suggestionItemRepo = await screen.findByText(/alpine/i);
@@ -100,7 +108,7 @@ describe('Search component', () => {
 
   it('should navigate to repo page when a image suggestion is clicked', async () => {
     jest.spyOn(api, 'get').mockResolvedValue({ status: 200, data: { data: mockImageList } });
-    render(<RouterSearchWrapper />);
+    renderSearch();
     const searchInput = screen.getByPlaceholderText(/search for content/i);
     userEvent.type(searchInput, 'debian:test');
     const suggestionItemImage = await screen.findByText(/debian:testTag/i);
@@ -111,7 +119,7 @@ describe('Search component', () => {
   it('should log an error if it doesnt receive an ok response for repo search', async () => {
     jest.spyOn(api, 'get').mockRejectedValue({ status: 500, data: {} });
     const error = jest.spyOn(console, 'error').mockImplementation(() => {});
-    render(<RouterSearchWrapper />);
+    renderSearch();
     const searchInput = screen.getByPlaceholderText(/search for content/i);
     userEvent.type(searchInput, 'debian');
     await waitFor(() => expect(error).toBeCalledTimes(1));
@@ -120,7 +128,7 @@ describe('Search component', () => {
   it('should log an error if it doesnt receive an ok response for image search', async () => {
     jest.spyOn(api, 'get').mockRejectedValue({ status: 500, data: {} });
     const error = jest.spyOn(console, 'error').mockImplementation(() => {});
-    render(<RouterSearchWrapper />);
+    renderSearch();
     const searchInput = screen.getByPlaceholderText(/search for content/i);
     userEvent.type(searchInput, 'debian:test');
     await waitFor(() => expect(error).toBeCalledTimes(1));

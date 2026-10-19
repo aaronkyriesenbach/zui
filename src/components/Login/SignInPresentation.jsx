@@ -1,13 +1,12 @@
 import React from 'react';
 
-import { Stack, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
+import { Box, Stack, Typography } from '@mui/material';
 
 import logoWhite from '../../assets/zotLogoWhiteHorizontal.svg';
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   container: {
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: 'secondary.main',
     minHeight: '100%',
     width: '100%',
     display: 'flex',
@@ -27,26 +26,25 @@ const useStyles = makeStyles((theme) => ({
     width: '64%'
   },
   mainText: {
-    color: '#F6F7F9',
+    color: 'text.onBrand',
     fontWeight: '700',
     width: '100%',
     fontSize: '2.5rem',
     lineHeight: '3rem'
   }
-}));
+};
 
 export default function SigninPresentation() {
-  const classes = useStyles();
   return (
-    <div className={classes.container}>
-      <Stack spacing={'3rem'} className={classes.contentContainer} data-testid="presentation-container">
-        <div className={classes.logoContainer}>
-          <img src={logoWhite} alt="zot logo" className={classes.logo}></img>
-        </div>
-        <Typography variant="h2" className={classes.mainText}>
+    <Box sx={styles.container}>
+      <Stack spacing={'3rem'} sx={styles.contentContainer} data-testid="presentation-container">
+        <Box sx={styles.logoContainer}>
+          <Box component="img" src={logoWhite} alt="zot logo" sx={styles.logo} />
+        </Box>
+        <Typography variant="h2" sx={styles.mainText}>
           OCI-native container image registry, simplified
         </Typography>
       </Stack>
-    </div>
+    </Box>
   );
 }

@@ -5,6 +5,7 @@ import { api, endpoints } from '../../../api';
 
 // components
 import {
+  Box,
   IconButton,
   Stack,
   Typography,
@@ -16,7 +17,6 @@ import {
   Snackbar,
   CircularProgress
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import { host } from '../../../host';
 import { debounce, isEmpty } from 'lodash';
 import Loading from '../../Shared/Loading';
@@ -36,38 +36,15 @@ import Collapse from '@mui/material/Collapse';
 import VulnerabilitiyCard from '../../Shared/VulnerabilityCard';
 import VulnerabilityCountCard from '../../Shared/VulnerabilityCountCard';
 
-const useStyles = makeStyles((theme) => ({
-  searchAndDisplayBar: {
-    display: 'flex',
-    justifyContent: 'space-between'
-  },
+const styles = {
   title: {
-    color: theme.palette.primary.main,
+    color: 'text.strong',
     fontSize: '1.5rem',
     fontWeight: '600',
     marginBottom: '0'
-  },
-  cveCountSummary: {
-    color: theme.palette.primary.main,
-    fontSize: '1.5rem',
-    fontWeight: '600',
-    marginBottom: '0'
-  },
-  cveId: {
-    color: theme.palette.primary.main,
-    fontSize: '1rem',
-    fontWeight: 400,
-    textDecoration: 'underline'
-  },
-  cveSummary: {
-    color: theme.palette.secondary.dark,
-    fontSize: '0.75rem',
-    fontWeight: '600',
-    textOverflow: 'ellipsis',
-    marginTop: '0.5rem'
   },
   none: {
-    color: '#52637A',
+    color: 'text.muted',
     fontSize: '1.4rem',
     fontWeight: '600'
   },
@@ -86,11 +63,9 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
     boxShadow: 'none',
-    border: '0.063rem solid #E7E7E7',
+    border: '0.063rem solid',
+    borderColor: 'border.light',
     borderRadius: '0.625rem'
-  },
-  expandableSearchInput: {
-    flexGrow: 0.95
   },
   view: {
     alignContent: 'right',
@@ -104,17 +79,17 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'right'
   },
   searchIcon: {
-    color: '#52637A',
+    color: 'text.muted',
     paddingRight: '3%'
   },
   searchInputBase: {
     width: '90%',
     paddingLeft: '1.5rem',
-    height: 40,
-    color: 'rgba(0, 0, 0, 0.6)'
+    height: '40px',
+    color: 'text.secondary'
   },
   input: {
-    color: '#464141',
+    color: 'text.body',
     '&::placeholder': {
       opacity: '1'
     }
@@ -132,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center'
   },
   dropdownText: {
-    color: '#1479FF',
+    color: 'text.link',
     fontSize: '1.5rem',
     fontWeight: '600',
     cursor: 'pointer',
@@ -141,10 +116,9 @@ const useStyles = makeStyles((theme) => ({
   test: {
     width: '95%'
   }
-}));
+};
 
 function VulnerabilitiesDetails(props) {
-  const classes = useStyles();
   const [cveData, setCveData] = useState([]);
   const [allCveData, setAllCveData] = useState([]);
   const [cveSummary, setCVESummary] = useState({});
@@ -345,7 +319,7 @@ function VulnerabilitiesDetails(props) {
         return <VulnerabilitiyCard key={index} cve={cve} name={name} platform={platform} expand={selectedViewMore} />;
       })
     ) : (
-      <div>{!isLoading && <Typography className={classes.none}> No Vulnerabilities </Typography>}</div>
+      <div>{!isLoading && <Typography sx={styles.none}> No Vulnerabilities </Typography>}</div>
     );
   };
 
@@ -381,24 +355,24 @@ function VulnerabilitiesDetails(props) {
 
   return (
     <Stack direction="column" spacing="1rem" data-testid="vulnerability-container">
-      <Stack className={classes.vulnerabilities}>
-        <Typography variant="h4" gutterBottom component="div" align="left" className={classes.title}>
+      <Stack sx={styles.vulnerabilities}>
+        <Typography variant="h4" gutterBottom component="div" align="left" sx={styles.title}>
           Vulnerabilities
         </Typography>
-        <Stack direction="row" spacing="1rem" className={classes.viewModes}>
+        <Stack direction="row" spacing="1rem" sx={styles.viewModes}>
           <IconButton disableRipple onClick={handleClickExport}>
             <DownloadIcon />
           </IconButton>
           <Snackbar
             open={openExport && isLoadingAllCve}
             message="Getting your data ready for export"
-            action={<CircularProgress size="2rem" sx={{ color: '#FFFFFF' }} />}
+            action={<CircularProgress size="2rem" sx={{ color: 'common.white' }} />}
           />
           <ToggleButton
             value="viewLess"
             title="Collapse list view"
             size="small"
-            className={classes.view}
+            sx={styles.view}
             selected={!selectedViewMore}
             onChange={() => setSelectedViewMore(false)}
           >
@@ -408,7 +382,7 @@ function VulnerabilitiesDetails(props) {
             value="viewMore"
             title="Expand list view"
             size="small"
-            className={classes.view}
+            sx={styles.view}
             selected={selectedViewMore}
             onChange={() => setSelectedViewMore(true)}
             data-testid="expand-list-view-toggle"
@@ -434,7 +408,7 @@ function VulnerabilitiesDetails(props) {
             onClick={handleOnExportCSV}
             disableRipple
             disabled={isLoadingAllCve}
-            className={classes.popper}
+            sx={styles.popper}
             data-testid="export-csv-menuItem"
           >
             csv
@@ -444,7 +418,7 @@ function VulnerabilitiesDetails(props) {
             onClick={handleOnExportExcel}
             disableRipple
             disabled={isLoadingAllCve}
-            className={classes.popper}
+            sx={styles.popper}
             data-testid="export-excel-menuItem"
           >
             xlsx
@@ -453,30 +427,30 @@ function VulnerabilitiesDetails(props) {
       </Stack>
       {renderCVESummary()}
       <Stack direction="row">
-        <div className={classes.dropdownArrowBox} onClick={handleExpandCVESearch}>
+        <Box sx={styles.dropdownArrowBox} onClick={handleExpandCVESearch}>
           {!openExcludeSearch ? (
-            <KeyboardArrowRight className={classes.dropdownText} />
+            <KeyboardArrowRight sx={styles.dropdownText} />
           ) : (
-            <KeyboardArrowDown className={classes.dropdownText} />
+            <KeyboardArrowDown sx={styles.dropdownText} />
           )}
-        </div>
-        <Stack className={classes.test} direction="column" spacing="0.25em">
-          <Stack className={classes.search}>
+        </Box>
+        <Stack sx={styles.test} direction="column" spacing="0.25em">
+          <Stack sx={styles.search}>
             <InputBase
               placeholder={'Search'}
-              classes={{ root: classes.searchInputBase, input: classes.input }}
+              sx={[styles.searchInputBase, { '& .MuiInputBase-input': styles.input }]}
               onChange={debouncedChangeHandler}
             />
-            <div className={classes.searchIcon}>
+            <Box sx={styles.searchIcon}>
               <SearchIcon />
-            </div>
+            </Box>
           </Stack>
 
           <Collapse in={openExcludeSearch} timeout="auto" unmountOnExit>
-            <Stack className={classes.search}>
+            <Stack sx={styles.search}>
               <InputBase
                 placeholder={'Exclude'}
-                classes={{ root: classes.searchInputBase, input: classes.input }}
+                sx={[styles.searchInputBase, { '& .MuiInputBase-input': styles.input }]}
                 onChange={debouncedExcludeFilterChangeHandler}
               />
             </Stack>

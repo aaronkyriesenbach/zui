@@ -5,29 +5,15 @@ import { host } from 'host';
 
 import { Dialog, DialogContent, DialogTitle, DialogActions, Button, Typography, Grid } from '@mui/material';
 
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(() => ({
+const styles = {
   gridWrapper: {
     paddingTop: '2rem',
     paddingBottom: '2rem'
-  },
-  apiKeyDisplay: {
-    boxSizing: 'border-box',
-    color: '#52637A',
-    fontSize: '1rem',
-    fontWeight: '400',
-    padding: '0.75rem',
-    backgroundColor: '#F7F7F7',
-    borderRadius: '0.9rem',
-    overflowWrap: 'break-word'
   }
-}));
+};
 
 function ApiKeyRevokeDialog(props) {
   const { open, setOpen, apiKey, onConfirm } = props;
-
-  const classes = useStyles();
 
   const handleClose = () => {
     setOpen(false);
@@ -48,8 +34,8 @@ function ApiKeyRevokeDialog(props) {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Revoke &quot;{apiKey?.label}&quot; key</DialogTitle>
-      <DialogContent className={classes.apiKeyForm}>
-        <Grid container className={classes.gridWrapper}>
+      <DialogContent>
+        <Grid container sx={styles.gridWrapper}>
           <Grid item xs={12}>
             <Typography>Are you sure you want to revoke this api key?</Typography>
           </Grid>

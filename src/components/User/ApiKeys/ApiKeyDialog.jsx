@@ -21,9 +21,7 @@ import {
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers';
 
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(() => ({
+const styles = {
   gridWrapper: {
     paddingTop: '2rem',
     paddingBottom: '2rem'
@@ -42,7 +40,7 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center',
     justifyContent: 'center'
   }
-}));
+};
 
 function ApiKeyDialog(props) {
   const { open, setOpen, onConfirm } = props;
@@ -50,8 +48,6 @@ function ApiKeyDialog(props) {
   const [apiKeyLabel, setApiKeyLabel] = useState();
   const [expirationDateOffset, setExpirationDateOffset] = useState(30);
   const [selectedExpirationDate, setSelectedExpirationDate] = useState();
-
-  const classes = useStyles();
 
   const handleClose = () => {
     setOpen(false);
@@ -105,9 +101,9 @@ function ApiKeyDialog(props) {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Create Api Key</DialogTitle>
-      <DialogContent className={classes.apiKeyForm}>
-        <Grid container className={classes.gridWrapper}>
-          <Grid item container className={classes.apiKeyLabel} xs={12}>
+      <DialogContent>
+        <Grid container sx={styles.gridWrapper}>
+          <Grid item container sx={styles.apiKeyLabel} xs={12}>
             <TextField
               autoFocus
               required
@@ -120,7 +116,7 @@ function ApiKeyDialog(props) {
           </Grid>
           <Grid container item xs={12}>
             <Grid item xs={5}>
-              <FormControl className={classes.expirationDateContainer} size="small" required>
+              <FormControl sx={styles.expirationDateContainer} size="small" required>
                 <InputLabel disableAnimation>Expiration date</InputLabel>
                 <Select
                   labelId="expirationDate"
@@ -128,7 +124,7 @@ function ApiKeyDialog(props) {
                   label="Expiration time"
                   onChange={handleExpirationDateChange}
                   value={expirationDateOffset}
-                  className={classes.expirationDateInput}
+                  sx={styles.expirationDateInput}
                 >
                   <MenuItem value={7}>7 days</MenuItem>
                   <MenuItem value={30}>30 days</MenuItem>
@@ -138,7 +134,7 @@ function ApiKeyDialog(props) {
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item className={classes.expirationDateDisplay} xs={7}>
+            <Grid item sx={styles.expirationDateDisplay} xs={7}>
               {expirationDateOffset === 'custom' ? (
                 <DatePicker
                   valueType="date"

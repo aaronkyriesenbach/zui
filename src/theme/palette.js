@@ -15,12 +15,16 @@ export const lightPalette = {
     default: '#F6F7F9',
     paper: '#FFFFFF',
     muted: '#F7F7F7',
-    chip: '#E0E5EB'
+    chip: '#E0E5EB',
+    selected: 'rgba(15, 33, 57, 0.05)'
   },
   border: {
     main: '#E0E5EB',
     strong: '#52637A',
-    input: 'rgba(0, 0, 0, 0.23)'
+    input: 'rgba(0, 0, 0, 0.23)',
+    light: '#E7E7E7',
+    soft: '#C2CBD6',
+    faint: '#f2f2f2'
   },
   text: {
     strong: '#14191F',
@@ -28,11 +32,23 @@ export const lightPalette = {
     muted: '#52637A',
     subtle: '#606060',
     faint: '#828282',
+    body: '#464141',
+    soft: '#C2CBD6',
+    fieldInput: '#8596AD',
+    fieldLabel: '#667C99',
+    tabInactive: '#656C75',
     contrast: '#000000',
     link: '#1479FF',
     linkAlt: '#3366CC',
     accent: '#220052',
     onBrand: '#F6F7F9'
+  },
+  header: {
+    background: '#0F2139',
+    border: '#BDBDBD',
+    inputBackground: '#2B3A4E',
+    inputBorder: '#8A96A8',
+    inputText: '#8A96A8'
   },
   shadow: {
     card: 'rgba(131, 131, 131, 0.08)',

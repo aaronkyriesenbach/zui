@@ -1,17 +1,15 @@
 import React from 'react';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import SvgIcon from '@mui/material/SvgIcon';
 import githubLogo from '../../assets/GhIcon.svg';
 
-// styling
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles(() => ({
+const styles = {
   githubButton: {
     textTransform: 'none',
-    background: '#161614',
-    color: '#FFFFFF',
+    backgroundColor: '#161614',
+    color: 'common.white',
     borderRadius: '0.25rem',
     padding: 0,
     height: '3.125rem',
@@ -23,15 +21,16 @@ const useStyles = makeStyles(() => ({
   },
   googleButton: {
     textTransform: 'none',
-    background: '#FFFFFF',
-    color: '#52637A',
+    backgroundColor: 'background.paper',
+    color: 'text.muted',
     borderRadius: '0.25rem',
-    border: '1px solid #52637A',
+    border: '1px solid',
+    borderColor: 'border.strong',
     padding: 0,
     height: '3.125rem',
     boxShadow: 'none',
     '&:hover': {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: 'background.paper',
       boxShadow: 'none'
     }
   },
@@ -42,50 +41,47 @@ const useStyles = makeStyles(() => ({
     fontWeight: '600',
     letterSpacing: '0.01rem'
   }
-}));
+};
 
 function GithubLoginButton({ handleClick }) {
-  const classes = useStyles();
-
   return (
     <Button
       fullWidth
       variant="contained"
-      className={classes.githubButton}
+      sx={styles.githubButton}
       endIcon={<SvgIcon fontSize="medium">{githubLogo}</SvgIcon>}
       onClick={(e) => handleClick(e, 'github')}
     >
-      <span className={classes.buttonsText}>Continue with Github</span>
+      <Box component="span" sx={styles.buttonsText}>
+        Continue with Github
+      </Box>
     </Button>
   );
 }
 
 function GoogleLoginButton({ handleClick }) {
-  const classes = useStyles();
-
   return (
-    <Button fullWidth variant="contained" className={classes.googleButton} onClick={(e) => handleClick(e, 'google')}>
-      <span className={classes.buttonsText}>Continue with Google</span>
+    <Button fullWidth variant="contained" sx={styles.googleButton} onClick={(e) => handleClick(e, 'google')}>
+      <Box component="span" sx={styles.buttonsText}>
+        Continue with Google
+      </Box>
     </Button>
   );
 }
 
 function GitlabLoginButton({ handleClick }) {
-  const classes = useStyles();
-
   return (
-    <Button fullWidth variant="contained" className={classes.button} onClick={(e) => handleClick(e, 'gitlab')}>
+    <Button fullWidth variant="contained" sx={styles.button} onClick={(e) => handleClick(e, 'gitlab')}>
       Sign in with Gitlab
     </Button>
   );
 }
 
 function OIDCLoginButton({ handleClick, oidcName }) {
-  const classes = useStyles();
   const loginWithName = oidcName || 'OIDC';
 
   return (
-    <Button fullWidth variant="contained" className={classes.button} onClick={(e) => handleClick(e, 'oidc')}>
+    <Button fullWidth variant="contained" sx={styles.button} onClick={(e) => handleClick(e, 'oidc')}>
       Sign in with {loginWithName}
     </Button>
   );

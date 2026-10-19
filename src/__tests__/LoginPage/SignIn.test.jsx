@@ -3,6 +3,9 @@ import React from 'react';
 import SignIn from 'components/Login/SignIn';
 import { api } from '../../api';
 import userEvent from '@testing-library/user-event';
+import MockThemeProvider from '__mocks__/MockThemeProvider';
+
+const renderSignIn = (ui) => render(<MockThemeProvider>{ui}</MockThemeProvider>);
 
 const mockMgmtResponse = {
   distSpecVersion: '1.1.0-dev',
@@ -24,14 +27,14 @@ afterEach(() => {
 
 describe('Signin component automatic navigation', () => {
   it('navigates to homepage when user is already logged in', async () => {
-    render(<SignIn isLoggedIn={true} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={true} setIsLoggedIn={() => {}} />);
     await expect(mockedUsedNavigate).toHaveBeenCalledWith('/home');
   });
 
   it('navigates to homepage when auth is disabled', async () => {
     // mock request to check auth
     jest.spyOn(api, 'get').mockResolvedValue({ status: 200, data: { http: {} } });
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
     await waitFor(() => {
       expect(mockedUsedNavigate).toHaveBeenCalledWith('/home');
     });
@@ -48,7 +51,7 @@ describe('Sign in form', () => {
   });
 
   it('should change username and password values on user input', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
     const usernameInput = await screen.findByLabelText(/^Username/i);
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
     fireEvent.change(usernameInput, { target: { value: 'test' } });
@@ -59,7 +62,7 @@ describe('Sign in form', () => {
   });
 
   it('should display error if username and password values are empty after change', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
     const usernameInput = await screen.findByLabelText(/^Username/i);
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
     await fireEvent.click(usernameInput);
@@ -75,7 +78,7 @@ describe('Sign in form', () => {
   });
 
   it('should log in the user and navigate to homepage if login is successful using button', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const usernameInput = await screen.findByLabelText(/^Username/i);
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
@@ -91,7 +94,7 @@ describe('Sign in form', () => {
   });
 
   it('should display an error if username is blank and login is attempted using button', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
     await userEvent.type(passwordInput, 'test');
@@ -106,7 +109,7 @@ describe('Sign in form', () => {
   });
 
   it('should display an error if password is blank and login is attempted using button', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const usernameInput = await screen.findByLabelText(/^Username/i);
     userEvent.type(usernameInput, 'test');
@@ -121,7 +124,7 @@ describe('Sign in form', () => {
   });
 
   it('should display an error if username and password are both blank and login is attempted using button', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const submitButton = await screen.findByTestId('basic-auth-submit-btn');
     fireEvent.click(submitButton);
@@ -134,7 +137,7 @@ describe('Sign in form', () => {
   });
 
   it('should log in the user and navigate to homepage if login is successful using enter key on username field', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const usernameInput = await screen.findByLabelText(/^Username/i);
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
@@ -149,7 +152,7 @@ describe('Sign in form', () => {
   });
 
   it('should log in the user and navigate to homepage if login is successful using enter key on password field', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const usernameInput = await screen.findByLabelText(/^Username/i);
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
@@ -164,7 +167,7 @@ describe('Sign in form', () => {
   });
 
   it('should display an error if username is blank and login is attempted using enter key', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
     userEvent.type(passwordInput, 'test');
@@ -178,7 +181,7 @@ describe('Sign in form', () => {
   });
 
   it('should display an error if password is blank and login is attempted using enter key', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const usernameInput = await screen.findByLabelText(/^Username/i);
     userEvent.type(usernameInput, 'test');
@@ -192,7 +195,7 @@ describe('Sign in form', () => {
   });
 
   it('should display an error if username and password are both blank and login is attempted using enter key', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
     userEvent.type(passwordInput, '{enter}');
@@ -205,7 +208,7 @@ describe('Sign in form', () => {
   });
 
   it('should should display login error if login not successful', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const usernameInput = await screen.findByLabelText(/^Username/i);
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);
@@ -238,7 +241,7 @@ describe('Sign in form', () => {
         }
       }
     });
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
     await waitFor(() => {
       expect(screen.getByText('Continue as guest')).toBeInTheDocument();
     });
@@ -247,7 +250,7 @@ describe('Sign in form', () => {
   });
 
   it('does not show continue as guest without anonymous access', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
     await screen.findByLabelText(/^Username/i);
     expect(screen.queryByText('Continue as guest')).not.toBeInTheDocument();
     expect(api.get).toHaveBeenCalledTimes(1);
@@ -255,7 +258,7 @@ describe('Sign in form', () => {
   });
 
   it('does not submit a second login while the first is in flight', async () => {
-    render(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
+    renderSignIn(<SignIn isLoggedIn={false} setIsLoggedIn={() => {}} />);
 
     const usernameInput = await screen.findByLabelText(/^Username/i);
     const passwordInput = await screen.findByLabelText(/^Enter Password/i);

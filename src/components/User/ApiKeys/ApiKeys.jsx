@@ -10,45 +10,42 @@ import ApiKeyDialog from './ApiKeyDialog';
 import ApiKeyConfirmDialog from './ApiKeyConfirmDialog';
 import ApiKeyCard from './ApiKeyCard';
 
-import { makeStyles } from '@mui/styles';
-
-const useStyles = makeStyles((theme) => ({
+const styles = {
   pageWrapper: {
     backgroundColor: 'transparent',
     height: '100%'
   },
-  header: {
+  header: (theme) => ({
     [theme.breakpoints.down('md')]: {
       padding: '0'
     }
-  },
+  }),
   cardRoot: {
     boxShadow: 'none!important'
   },
   pageTitle: {
     fontWeight: '600',
     fontSize: '1.5rem',
-    color: theme.palette.secondary.main,
+    color: 'text.heading',
     textAlign: 'left'
   },
-  apikeysContainer: {
+  apikeysContainer: (theme) => ({
     marginTop: '1.5rem',
     height: '100%',
     [theme.breakpoints.down('md')]: {
       padding: '0'
     }
-  },
+  }),
   apikeysContent: {
     padding: '1.5rem'
   }
-}));
+};
 
 function ApiKeys() {
   const abortController = useMemo(() => new AbortController(), []);
   const [isLoading, setIsLoading] = useState(true);
   const [apiKeys, setApiKeys] = useState([]);
   const [newApiKey, setNewApiKey] = useState();
-  const classes = useStyles();
 
   // ApiKey dialog props
   const [apiKeyDialogOpen, setApiKeyDialogOpen] = useState(false);
@@ -103,14 +100,14 @@ function ApiKeys() {
       {isLoading ? (
         <Loading />
       ) : (
-        <Grid container className={classes.pageWrapper}>
+        <Grid container sx={styles.pageWrapper}>
           <Grid item xs={12} md={12}>
-            <Card className={classes.cardRoot}>
+            <Card sx={styles.cardRoot}>
               <CardContent>
-                <Grid container className={classes.header}>
+                <Grid container sx={styles.header}>
                   <Grid item xs={12}>
                     <Stack direction="row" justifyContent="space-between">
-                      <Typography variant="h4" className={classes.pageTitle}>
+                      <Typography variant="h4" sx={styles.pageTitle}>
                         Manage your API Keys
                       </Typography>
                       <Button variant="contained" color="success" onClick={handleApiKeyDialogOpen}>
@@ -123,9 +120,9 @@ function ApiKeys() {
             </Card>
           </Grid>
           {!isLoading && !isEmpty(apiKeys) && (
-            <Grid item xs={12} className={classes.apikeysContainer}>
-              <Card className={classes.cardRoot}>
-                <CardContent className={classes.apikeysContent}>
+            <Grid item xs={12} sx={styles.apikeysContainer}>
+              <Card sx={styles.cardRoot}>
+                <CardContent sx={styles.apikeysContent}>
                   <Stack direction="column" spacing={1}>
                     {renderApiKeys()}
                   </Stack>
