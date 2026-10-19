@@ -2,14 +2,13 @@
 import React from 'react';
 
 // components
-import { Stack, Typography } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 
 //styling
-import makeStyles from '@mui/styles/makeStyles';
 
 import nodataImage from '../../assets/noData.svg';
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   noDataContainer: {
     display: 'flex',
     justifyContent: 'center',
@@ -22,17 +21,15 @@ const useStyles = makeStyles((theme) => ({
   noDataText: {
     fontSize: '1.5rem',
     fontWeight: '600',
-    color: theme.palette.secondary.main
+    color: 'text.heading'
   }
-}));
+};
 
 function NoDataComponent({ text }) {
-  const classes = useStyles();
-
   return (
-    <Stack className={classes.noDataContainer}>
-      <img src={nodataImage} className={classes.noDataImage} />
-      <Typography className={classes.noDataText}>{text ? text : 'No Data'}</Typography>
+    <Stack sx={styles.noDataContainer}>
+      <Box component="img" src={nodataImage} sx={styles.noDataImage} />
+      <Typography sx={styles.noDataText}>{text ? text : 'No Data'}</Typography>
     </Stack>
   );
 }

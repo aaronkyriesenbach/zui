@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import ReferredBy from 'components/Tag/Tabs/ReferredBy';
+import MockThemeProvider from '__mocks__/MockThemeProvider';
 import React from 'react';
 
 const mockReferrersList = [
@@ -52,17 +53,29 @@ afterEach(() => {
 
 describe('Referred by tab', () => {
   it('should render referrers if there are any', async () => {
-    render(<ReferredBy referrers={mockReferrersList} />);
+    render(
+      <MockThemeProvider>
+        <ReferredBy referrers={mockReferrersList} />
+      </MockThemeProvider>
+    );
     expect(await screen.findAllByText('Media type: application/vnd.oci.artifact.manifest.v1+json')).toHaveLength(2);
   });
 
   it("renders no referrers if there aren't any", async () => {
-    render(<ReferredBy referrers={[]} />);
+    render(
+      <MockThemeProvider>
+        <ReferredBy referrers={[]} />
+      </MockThemeProvider>
+    );
     expect(await screen.findByText(/Nothing found/i)).toBeInTheDocument();
   });
 
   it('should display the digest when clicking the dropdowns', async () => {
-    render(<ReferredBy referrers={mockReferrersList} />);
+    render(
+      <MockThemeProvider>
+        <ReferredBy referrers={mockReferrersList} />
+      </MockThemeProvider>
+    );
     const firstDigest = (await screen.findAllByText(/digest/i))[0];
     expect(firstDigest).toBeInTheDocument();
     await userEvent.click(firstDigest);
@@ -76,7 +89,11 @@ describe('Referred by tab', () => {
   });
 
   it('should display the annotations when clicking the dropdown', async () => {
-    render(<ReferredBy referrers={mockReferrersList} />);
+    render(
+      <MockThemeProvider>
+        <ReferredBy referrers={mockReferrersList} />
+      </MockThemeProvider>
+    );
     const firstAnnotations = (await screen.findAllByText(/ANNOTATIONS/i))[0];
     expect(firstAnnotations).toBeInTheDocument();
     await userEvent.click(firstAnnotations);

@@ -1,8 +1,8 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 import logo from '../../assets/Zot2.svg';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   wrapper: {
     position: 'relative',
     top: '10%',
@@ -16,15 +16,13 @@ const useStyles = makeStyles(() => ({
     width: '100%',
     height: '100%'
   }
-}));
+};
 
 const Loading = () => {
-  const classes = useStyles();
-
   return (
-    <div className={classes.wrapper}>
+    <Box sx={styles.wrapper}>
       <img src={logo} className="App-logo Loading" alt="logo" />
-    </div>
+    </Box>
   );
 };
 

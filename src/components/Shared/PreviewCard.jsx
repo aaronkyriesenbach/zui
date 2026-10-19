@@ -1,22 +1,22 @@
 import { Card, CardActionArea, CardContent, Grid, Stack, Tooltip, Typography } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import React from 'react';
 import { useNavigate } from 'react-router';
 
 import OciImage from './OciImage';
 
 import { VulnerabilityIconCheck } from 'utilities/vulnerabilityAndSignatureCheck';
+import { cardShadow } from 'theme/styles';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   card: {
-    marginBottom: 2,
+    marginBottom: '2px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    background: '#FFFFFF',
-    boxShadow: '0rem 0.3125rem 0.625rem rgba(131, 131, 131, 0.08)',
+    backgroundColor: 'background.paper',
+    boxShadow: cardShadow,
     borderRadius: '1.5rem',
-    borderColor: '#FFFFFF',
+    borderColor: 'background.paper',
     flex: 'none',
     alignSelf: 'stretch',
     flexGrow: 0,
@@ -39,18 +39,17 @@ const useStyles = makeStyles(() => ({
   },
   content: {
     textAlign: 'left',
-    color: '#606060'
+    color: 'text.subtle'
   },
   signedBadge: {
     color: '#9ccc65',
     height: '1.375rem',
     width: '1.375rem',
-    marginLeft: 10
+    marginLeft: '10px'
   }
-}));
+};
 
 function PreviewCard(props) {
-  const classes = useStyles();
   const navigate = useNavigate();
   const { name, vulnerabilityData, logo, digest } = props;
 
@@ -59,21 +58,13 @@ function PreviewCard(props) {
   };
 
   return (
-    <Card variant="outlined" className={classes.card}>
-      <CardActionArea onClick={() => goToDetails()} className={classes.cardBtn}>
-        <CardContent className={classes.content}>
+    <Card variant="outlined" sx={styles.card}>
+      <CardActionArea onClick={() => goToDetails()} sx={styles.cardBtn}>
+        <CardContent sx={styles.content}>
           <Grid container spacing={1}>
             <Grid container item xs={12}>
               <Stack direction="row" spacing={4} sx={{ display: 'flex', alignItems: 'left', flexWrap: 'wrap' }}>
-                <OciImage
-                  classes={{
-                    root: classes.media,
-                    img: classes.avatar
-                  }}
-                  digest={digest}
-                  name={name}
-                  logo={logo}
-                />
+                <OciImage sx={[styles.media, styles.avatar]} digest={digest} name={name} logo={logo} />
                 <Tooltip title={name} placement="top">
                   <Typography
                     variant="h5"
@@ -81,7 +72,7 @@ function PreviewCard(props) {
                     sx={{
                       size: '1.5rem',
                       lineHeight: '2rem',
-                      color: '#220052',
+                      color: 'text.accent',
                       width: '5rem',
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',

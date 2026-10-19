@@ -1,16 +1,16 @@
 import React from 'react';
-import { makeStyles } from '@mui/styles';
 import { Card, CardContent, Stack, Tooltip, Typography, Collapse, Box, Grid } from '@mui/material';
 import { KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material';
 import { useState } from 'react';
+import { cardShadow } from 'theme/styles';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   refCard: {
-    marginBottom: 2,
+    marginBottom: '2px',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    background: '#FFFFFF',
+    backgroundColor: 'background.paper',
     boxShadow: 'none!important',
     borderRadius: '1.875rem',
     flex: 'none',
@@ -24,8 +24,8 @@ const useStyles = makeStyles(() => ({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    background: '#FFFFFF',
-    boxShadow: '0rem 0.3125rem 0.625rem rgba(131, 131, 131, 0.08)',
+    backgroundColor: 'background.paper',
+    boxShadow: cardShadow,
     borderRadius: '1.875rem',
     flex: 'none',
     alignSelf: 'stretch',
@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
   },
   content: {
     textAlign: 'left',
-    color: '#606060',
+    color: 'text.subtle',
     padding: '2% 3% 2% 3%',
     width: '100%'
   },
@@ -43,7 +43,7 @@ const useStyles = makeStyles(() => ({
     cursor: 'pointer'
   },
   cardText: {
-    color: '#000000',
+    color: 'text.contrast',
     fontSize: '1rem',
     paddingBottom: '0.5rem',
     paddingTop: '0.5rem',
@@ -54,42 +54,41 @@ const useStyles = makeStyles(() => ({
     alignItems: 'center'
   },
   dropdownText: {
-    color: '#1479FF',
+    color: 'text.link',
     paddingTop: '1rem',
     fontSize: '1rem',
     fontWeight: '600',
     cursor: 'pointer',
     textAlign: 'center'
   }
-}));
+};
 
 export default function ReferrerCard(props) {
   const { artifactType, mediaType, size, digest, annotations } = props;
   const [digestDropdownOpen, setDigestDropdownOpen] = useState(false);
   const [annotationDropdownOpen, setAnnotationDropdownOpen] = useState(false);
-  const classes = useStyles();
 
   return (
-    <Card className={classes.card} raised>
-      <CardContent className={classes.content}>
-        <Typography variant="body1" align="left" className={classes.cardText}>
+    <Card sx={styles.card} raised>
+      <CardContent sx={styles.content}>
+        <Typography variant="body1" align="left" sx={styles.cardText}>
           Type: {artifactType && `${artifactType}`}
         </Typography>
-        <Typography variant="body1" align="left" className={classes.cardText}>
+        <Typography variant="body1" align="left" sx={styles.cardText}>
           Media type: {mediaType && `${mediaType}`}
         </Typography>
-        <Typography variant="body1" align="left" className={classes.cardText}>
+        <Typography variant="body1" align="left" sx={styles.cardText}>
           Size: {size && `${size}`}
         </Typography>
         <Stack direction="row" onClick={() => setDigestDropdownOpen(!digestDropdownOpen)}>
           {!digestDropdownOpen ? (
-            <KeyboardArrowRight className={classes.dropdownText} />
+            <KeyboardArrowRight sx={styles.dropdownText} />
           ) : (
-            <KeyboardArrowDown className={classes.dropdownText} />
+            <KeyboardArrowDown sx={styles.dropdownText} />
           )}
           <Typography
             sx={{
-              color: '#1479FF',
+              color: 'text.link',
               paddingTop: '1rem',
               fontSize: '0.8125rem',
               fontWeight: '600',
@@ -111,13 +110,13 @@ export default function ReferrerCard(props) {
 
         <Stack direction="row" onClick={() => setAnnotationDropdownOpen(!annotationDropdownOpen)}>
           {!annotationDropdownOpen ? (
-            <KeyboardArrowRight className={classes.dropdownText} />
+            <KeyboardArrowRight sx={styles.dropdownText} />
           ) : (
-            <KeyboardArrowDown className={classes.dropdownText} />
+            <KeyboardArrowDown sx={styles.dropdownText} />
           )}
           <Typography
             sx={{
-              color: '#1479FF',
+              color: 'text.link',
               paddingTop: '1rem',
               fontSize: '0.8125rem',
               fontWeight: '600',

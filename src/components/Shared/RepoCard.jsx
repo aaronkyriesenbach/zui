@@ -24,7 +24,6 @@ import {
   IconButton,
   useMediaQuery
 } from '@mui/material';
-import makeStyles from '@mui/styles/makeStyles';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import StarIcon from '@mui/icons-material/Star';
@@ -36,24 +35,25 @@ import { Markdown } from 'utilities/MarkdowntojsxWrapper';
 import filterConstants from 'utilities/filterConstants';
 
 import OciImage from './OciImage';
+import { cardShadow, cardShadowHover } from 'theme/styles';
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   card: {
     marginBottom: '1rem',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderColor: '#FFFFFF',
+    backgroundColor: 'background.paper',
+    borderColor: 'background.paper',
     borderRadius: '0.75rem',
-    boxShadow: '0rem 0.313rem 0.625rem rgba(131, 131, 131, 0.08)',
+    boxShadow: cardShadow,
     flex: 'none',
     alignSelf: 'stretch',
     flexGrow: 0,
     width: '100%',
     maxWidth: '72rem',
     '&:hover': {
-      boxShadow: '0rem 1.1875rem 1.4375rem rgba(131, 131, 131, 0.19)',
+      boxShadow: cardShadowHover,
       borderRadius: '0.75rem'
     }
   },
@@ -66,23 +66,22 @@ const useStyles = makeStyles((theme) => ({
     height: '100%',
     width: '100%',
     borderRadius: '0.75rem',
-    borderColor: '#FFFFFF',
-    '&:hover $focusHighlight': {
+    borderColor: 'background.paper',
+    '&:hover .MuiCardActionArea-focusHighlight': {
       opacity: 0
     }
   },
-  focusHighlight: {},
   media: {
     borderRadius: '3.125rem'
   },
   content: {
     textAlign: 'left',
-    color: '#606060',
+    color: 'text.subtle',
     maxHeight: '9.25rem',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: 'background.paper',
     padding: '1.188rem 1rem',
     '&:hover': {
-      backgroundColor: '#FFFFFF'
+      backgroundColor: 'background.paper'
     }
   },
   contentRight: {
@@ -92,14 +91,14 @@ const useStyles = makeStyles((theme) => ({
   contentRightLabel: {
     fontSize: '0.75rem',
     lineHeight: '1.125rem',
-    color: '#52637A',
+    color: 'text.muted',
     textAlign: 'end'
   },
   contentRightValue: {
     fontSize: '0.75rem',
     lineHeight: '1.125rem',
     fontWeight: '600',
-    color: '#14191F',
+    color: 'text.strong',
     textAlign: 'end',
     marginLeft: '0.5rem'
   },
@@ -107,21 +106,15 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'flex-end',
     justifyContent: 'flex-end'
   },
-  signedBadge: {
-    color: '#9ccc65',
-    height: '1.375rem',
-    width: '1.375rem',
-    marginLeft: 10
-  },
   vendor: {
-    color: theme.palette.primary.main,
+    color: 'text.strong',
     fontSize: '0.75rem',
     maxWidth: '50%',
     textOverflow: 'ellipsis',
     lineHeight: '1.125rem'
   },
   description: {
-    color: '#52637A',
+    color: 'text.muted',
     fontSize: '1rem',
     lineHeight: '1.5rem',
     textOverflow: 'ellipsis',
@@ -129,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '1rem'
   },
   versionLast: {
-    color: theme.palette.secondary.dark,
+    color: 'text.muted',
     fontSize: '0.75rem',
     lineHeight: '1.125rem',
     textOverflow: 'ellipsis'
@@ -138,24 +131,23 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis',
     maxWidth: '70%',
     fontWeight: '600',
-    color: '#0F2139',
+    color: 'text.heading',
     lineHeight: '2rem'
   },
   platformChips: {
-    backgroundColor: '#E0E5EB',
-    color: '#52637A',
+    backgroundColor: 'background.chip',
+    color: 'text.muted',
     fontSize: '0.813rem',
     lineHeight: '0.813rem',
     borderRadius: '0.375rem',
-    padding: '0.313rem 0.625rem'
-  },
-  chipLabel: {
-    padding: '0'
+    padding: '0.313rem 0.625rem',
+    '& .MuiChip-label': {
+      padding: '0'
+    }
   }
-}));
+};
 
 function RepoCard(props) {
-  const classes = useStyles();
   const navigate = useNavigate();
 
   // dynamically check device size with mui media query hook
@@ -238,10 +230,7 @@ function RepoCard(props) {
         key={`${name}${platform}${index}`}
         label={platform}
         onClick={handlePlatformChipClick}
-        className={classes.platformChips}
-        classes={{
-          label: classes.chipLabel
-        }}
+        sx={styles.platformChips}
       />
     ));
   };
@@ -302,29 +291,15 @@ function RepoCard(props) {
   };
 
   return (
-    <Card variant="outlined" className={classes.card} data-testid="repo-card">
-      <CardActionArea
-        onClick={goToDetails}
-        classes={{
-          root: classes.cardBtn,
-          focusHighlight: classes.focusHighlight
-        }}
-      >
-        <CardContent className={classes.content}>
+    <Card variant="outlined" sx={styles.card} data-testid="repo-card">
+      <CardActionArea onClick={goToDetails} sx={styles.cardBtn}>
+        <CardContent sx={styles.content}>
           <Grid container>
             <Grid item xs={12} md={10}>
               <Stack alignItems="center" direction="row" spacing={2}>
-                <OciImage
-                  classes={{
-                    root: classes.media,
-                    img: classes.avatar
-                  }}
-                  digest={digest}
-                  name={name}
-                  logo={logo}
-                />
+                <OciImage sx={[styles.media, styles.avatar]} digest={digest} name={name} logo={logo} />
                 <Tooltip title={name} placement="top">
-                  <Typography variant="h5" component="div" noWrap className={classes.cardTitle}>
+                  <Typography variant="h5" component="div" noWrap sx={styles.cardTitle}>
                     {name}
                   </Typography>
                 </Tooltip>
@@ -334,7 +309,7 @@ function RepoCard(props) {
                 {getSignatureChips()}
               </Stack>
               <Tooltip title={description || 'Description not available'} placement="top">
-                <Typography className={classes.description} pt={1} sx={{ fontSize: 12 }} gutterBottom noWrap>
+                <Typography sx={styles.description} gutterBottom noWrap>
                   {description || 'Description not available'}
                 </Typography>
               </Tooltip>
@@ -343,49 +318,49 @@ function RepoCard(props) {
               </Stack>
               <Stack alignItems="center" direction="row" spacing={1} pt={'0.5rem'}>
                 <Tooltip title={getVendor()} placement="top" className="hide-on-mobile">
-                  <Typography className={classes.vendor} variant="body2" noWrap>
+                  <Typography sx={styles.vendor} variant="body2" noWrap>
                     {<Markdown options={{ forceInline: true }}>{getVendor()}</Markdown>}
                   </Typography>
                 </Tooltip>
                 <Tooltip title={getVersion()} placement="top" className="hide-on-mobile">
-                  <Typography className={classes.versionLast} variant="body2" noWrap>
+                  <Typography sx={styles.versionLast} variant="body2" noWrap>
                     {getVersion()}
                   </Typography>
                 </Tooltip>
                 <Tooltip title={lastUpdated?.slice(0, 16) || ' '} placement="top">
-                  <Typography className={classes.versionLast} variant="body2" noWrap>
+                  <Typography sx={styles.versionLast} variant="body2" noWrap>
                     {getLast()}
                   </Typography>
                 </Tooltip>
               </Stack>
             </Grid>
-            <Grid item container xs={2} md={2} className={`hide-on-mobile ${classes.contentRight}`}>
+            <Grid item container xs={2} md={2} className="hide-on-mobile" sx={styles.contentRight}>
               <Grid item xs={12}>
-                <Typography variant="body2" component="span" className={classes.contentRightLabel}>
+                <Typography variant="body2" component="span" sx={styles.contentRightLabel}>
                   Downloads •
                 </Typography>
-                <Typography variant="body2" component="span" className={classes.contentRightValue}>
+                <Typography variant="body2" component="span" sx={styles.contentRightValue}>
                   {!isNaN(downloads) ? downloads : `not available`}
                 </Typography>
               </Grid>
               {/* <Grid item xs={12}>
-                  <Typography variant="body2" component="span" className={classes.contentRightLabel}>
+                  <Typography variant="body2" component="span" sx={styles.contentRightLabel}>
                     Rating •
                   </Typography>
-                  <Typography variant="body2" component="span" className={classes.contentRightValue}>
+                  <Typography variant="body2" component="span" sx={styles.contentRightValue}>
                     #1
                   </Typography>
                 </Grid> */}
               <Grid item xs={12}>
                 {renderStar()}
-                <Typography variant="body2" component="span" className={classes.contentRightLabel}>
+                <Typography variant="body2" component="span" sx={styles.contentRightLabel}>
                   Stars •
                 </Typography>
-                <Typography variant="body2" component="span" className={classes.contentRightValue}>
+                <Typography variant="body2" component="span" sx={styles.contentRightValue}>
                   {!isNaN(currentStarCount) ? currentStarCount : `not available`}
                 </Typography>
               </Grid>
-              <Grid container item xs={12} className={classes.contentRightActions}>
+              <Grid container item xs={12} sx={styles.contentRightActions}>
                 <Grid item>{renderBookmark()}</Grid>
               </Grid>
             </Grid>

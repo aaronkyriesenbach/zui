@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-import makeStyles from '@mui/styles/makeStyles';
 import { Grid, Button, FormControl, Menu, MenuItem, Box, Tab, InputBase, IconButton, ButtonBase } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
 import { dockerPull, podmanPull, podmanArtifactPull, skopeoPull, orasPull } from 'utilities/pullStrings';
@@ -10,10 +9,11 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   copyStringSelect: {
     '& fieldset': {
-      border: ' 0.0625rem solid #52637A'
+      border: ' 0.0625rem solid',
+      borderColor: 'border.strong'
     },
     display: 'flex',
     justifyContent: 'space-between',
@@ -21,9 +21,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '1rem',
     width: '100%',
     height: '100%',
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: 'secondary.main',
     borderRadius: '0.5rem',
-    color: '#F6F7F9',
+    color: 'text.onBrand',
     fontFamily: 'Roboto',
     fontSize: '1rem',
     fontWeight: 600,
@@ -31,12 +31,13 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none'
   },
   copyStringSelectOpened: {
-    color: '#00000099',
-    backgroundColor: '#FFFFFF'
+    color: 'text.secondary',
+    backgroundColor: 'background.paper'
   },
   pullStringBox: {
     width: '19.365rem',
-    border: '0.0625rem solid rgba(0, 0, 0, 0.23)',
+    border: '0.0625rem solid',
+    borderColor: 'border.input',
     borderRadius: '0.5rem',
     padding: '0rem 0rem',
     fontSize: '1rem'
@@ -49,8 +50,9 @@ const useStyles = makeStyles((theme) => ({
     padding: '0rem 1rem 0rem 1rem',
     fontFamily: 'Roboto',
     fontSize: '1rem',
-    color: '#FFFFFF',
-    border: '0.0625rem solid rgba(0, 0, 0, 0.23)',
+    color: 'common.white',
+    border: '0.0625rem solid',
+    borderColor: 'border.input',
     borderRadius: '0.5rem',
     height: '3.5rem',
     textTransform: 'none',
@@ -59,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   selectedPullTab: {
-    background: '#D83C0E',
+    backgroundColor: '#D83C0E',
     borderRadius: '1.5rem'
   },
   tabContent: {
@@ -68,49 +70,51 @@ const useStyles = makeStyles((theme) => ({
   tabBox: {
     padding: '0.5rem'
   },
-  tabPanel: {
+  tabPanel: (theme) => ({
     height: '100%',
     paddingLeft: '0rem!important',
     [theme.breakpoints.down('md')]: {
       padding: '1.5rem 0'
     }
-  },
-  pullText: {
-    width: '14.5rem',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis'
-  },
+  }),
   textEllipsis: {
-    padding: '0rem 1rem'
+    padding: '0rem 1rem',
+    '& .MuiInputBase-input': {
+      width: '14.5rem',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }
   },
   selectIcon: {
-    fill: '#F6F7F9'
+    color: 'text.onBrand'
   },
   selectIconOpened: {
-    fill: '#00000099'
+    color: 'text.secondary'
   },
   popper: {
     width: '100%',
     overflow: 'hidden',
     padding: '0rem',
-    '&:hover': { backgroundColor: '#FFFFFF' },
-    '&:focus': { backgroundColor: '#FFFFFF' },
+    '&:hover': { backgroundColor: 'background.paper' },
+    '&:focus': { backgroundColor: 'background.paper' },
     '&.Mui-focusVisible': {
-      backgroundColor: '#FFFFFF!important'
+      backgroundColor: 'background.paper'
     }
   },
   copyButtonContainer: {
-    borderLeft: '0.0625rem solid rgba(0, 0, 0, 0.23)',
+    borderLeft: '0.0625rem solid',
+    borderColor: 'border.input',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center'
+  },
+  tabList: {
+    '& button.Mui-selected': { color: 'text.strong', fontWeight: '600' }
   }
-}));
+};
 
 function PullCommandButton(props) {
-  const classes = useStyles();
-
   const { imageName, isArtifact } = props;
   const podmanCommand = isArtifact ? podmanArtifactPull(imageName) : podmanPull(imageName);
 
@@ -144,9 +148,9 @@ function PullCommandButton(props) {
 
   const getButtonIcon = () => {
     if (open) {
-      return <ExpandLessIcon className={classes.selectIconOpened} />;
+      return <ExpandLessIcon sx={styles.selectIconOpened} />;
     }
-    return <ExpandMoreIcon className={classes.selectIcon} />;
+    return <ExpandMoreIcon sx={styles.selectIcon} />;
   };
 
   const handlePullTabChange = (event, newValue) => {
@@ -170,7 +174,7 @@ function PullCommandButton(props) {
   }, [isCopied]);
 
   return isCopied ? (
-    <Button className={classes.pullStringBoxCopied} data-testid="successPulled-buton">
+    <Button sx={styles.pullStringBoxCopied} data-testid="successPulled-buton">
       Copied Pull Command
       <CheckCircleIcon />
     </Button>
@@ -178,7 +182,7 @@ function PullCommandButton(props) {
     <FormControl variant="outlined" sx={{ width: '100%', height: '3.5rem' }}>
       <ButtonBase
         onClick={handleClick}
-        className={`${classes.copyStringSelect} ${open && classes.copyStringSelectOpened}`}
+        sx={[styles.copyStringSelect, open && styles.copyStringSelectOpened]}
         disableRipple
       >
         Pull {imageName}
@@ -192,35 +196,34 @@ function PullCommandButton(props) {
         disableScrollLock
         data-testid="pull-dropdown"
       >
-        <MenuItem disableRipple className={classes.popper} data-testid="pull-menuItem">
+        <MenuItem disableRipple sx={styles.popper} data-testid="pull-menuItem">
           <TabContext value={selectedPullTab}>
             <Box>
               <TabList
                 onChange={handlePullTabChange}
-                TabIndicatorProps={{ className: classes.selectedPullTab }}
-                sx={{ '& button.Mui-selected': { color: '#14191F', fontWeight: '600' } }}
+                TabIndicatorProps={{ sx: styles.selectedPullTab }}
+                sx={styles.tabList}
               >
-                {isArtifact && <Tab value={orasPull(imageName)} label="ORAS" className={classes.tabContent} />}
-                {!isArtifact && <Tab value={dockerPull(imageName)} label="Docker" className={classes.tabContent} />}
-                <Tab value={podmanCommand} label="Podman" className={classes.tabContent} />
-                {!isArtifact && <Tab value={skopeoPull(imageName)} label="Skopeo" className={classes.tabContent} />}
+                {isArtifact && <Tab value={orasPull(imageName)} label="ORAS" sx={styles.tabContent} />}
+                {!isArtifact && <Tab value={dockerPull(imageName)} label="Docker" sx={styles.tabContent} />}
+                <Tab value={podmanCommand} label="Podman" sx={styles.tabContent} />
+                {!isArtifact && <Tab value={skopeoPull(imageName)} label="Skopeo" sx={styles.tabContent} />}
               </TabList>
               <Grid container>
                 <Grid item xs={12}>
                   {isArtifact && (
-                    <TabPanel value={orasPull(imageName)} className={classes.tabPanel}>
-                      <Box className={classes.tabBox}>
-                        <Grid container item xs={12} className={classes.pullStringBox}>
+                    <TabPanel value={orasPull(imageName)} sx={styles.tabPanel}>
+                      <Box sx={styles.tabBox}>
+                        <Grid container item xs={12} sx={styles.pullStringBox}>
                           <Grid item xs={10}>
                             <InputBase
-                              classes={{ input: classes.pullText }}
                               onKeyDownCapture={(e) => e.preventDefault()}
-                              className={classes.textEllipsis}
+                              sx={styles.textEllipsis}
                               defaultValue={orasPull(imageName)}
                               data-testid="oras-input"
                             />
                           </Grid>
-                          <Grid item xs={2} onClick={handleCopyClick} className={classes.copyButtonContainer}>
+                          <Grid item xs={2} onClick={handleCopyClick} sx={styles.copyButtonContainer}>
                             <IconButton aria-label="copy" data-testid="orasPullcopy-btn">
                               <ContentCopyIcon sx={{ fontSize: '1rem' }} />
                             </IconButton>
@@ -229,38 +232,38 @@ function PullCommandButton(props) {
                       </Box>
                     </TabPanel>
                   )}
-                  {!isArtifact && <TabPanel value={dockerPull(imageName)} className={classes.tabPanel}>
-                    <Box className={classes.tabBox}>
-                      <Grid container item xs={12} className={classes.pullStringBox}>
+                  {!isArtifact && (
+                    <TabPanel value={dockerPull(imageName)} sx={styles.tabPanel}>
+                      <Box sx={styles.tabBox}>
+                        <Grid container item xs={12} sx={styles.pullStringBox}>
+                          <Grid item xs={10}>
+                            <InputBase
+                              onKeyDownCapture={(e) => e.preventDefault()}
+                              sx={styles.textEllipsis}
+                              defaultValue={dockerPull(imageName)}
+                            />
+                          </Grid>
+                          <Grid item xs={2} onClick={handleCopyClick} sx={styles.copyButtonContainer}>
+                            <IconButton aria-label="copy" data-testid="pullcopy-btn">
+                              <ContentCopyIcon sx={{ fontSize: '1rem' }} />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      </Box>
+                    </TabPanel>
+                  )}
+                  <TabPanel value={podmanCommand} sx={styles.tabPanel}>
+                    <Box sx={styles.tabBox}>
+                      <Grid container item xs={12} sx={styles.pullStringBox}>
                         <Grid item xs={10}>
                           <InputBase
-                            classes={{ input: classes.pullText }}
                             onKeyDownCapture={(e) => e.preventDefault()}
-                            className={classes.textEllipsis}
-                            defaultValue={dockerPull(imageName)}
-                          />
-                        </Grid>
-                        <Grid item xs={2} onClick={handleCopyClick} className={classes.copyButtonContainer}>
-                          <IconButton aria-label="copy" data-testid="pullcopy-btn">
-                            <ContentCopyIcon sx={{ fontSize: '1rem' }} />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </TabPanel>}
-                  <TabPanel value={podmanCommand} className={classes.tabPanel}>
-                    <Box className={classes.tabBox}>
-                      <Grid container item xs={12} className={classes.pullStringBox}>
-                        <Grid item xs={10}>
-                          <InputBase
-                            classes={{ input: classes.pullText }}
-                            onKeyDownCapture={(e) => e.preventDefault()}
-                            className={classes.textEllipsis}
+                            sx={styles.textEllipsis}
                             defaultValue={podmanCommand}
                             data-testid="podman-input"
                           />
                         </Grid>
-                        <Grid item xs={2} onClick={handleCopyClick} className={classes.copyButtonContainer}>
+                        <Grid item xs={2} onClick={handleCopyClick} sx={styles.copyButtonContainer}>
                           <IconButton aria-label="copy" data-testid="podmanPullcopy-btn">
                             <ContentCopyIcon sx={{ fontSize: '1rem' }} />
                           </IconButton>
@@ -268,25 +271,26 @@ function PullCommandButton(props) {
                       </Grid>
                     </Box>
                   </TabPanel>
-                  {!isArtifact && <TabPanel value={skopeoPull(imageName)} className={classes.tabPanel}>
-                    <Box className={classes.tabBox}>
-                      <Grid container item xs={12} className={classes.pullStringBox}>
-                        <Grid item xs={10}>
-                          <InputBase
-                            classes={{ input: classes.pullText }}
-                            onKeyDownCapture={(e) => e.preventDefault()}
-                            className={classes.textEllipsis}
-                            defaultValue={skopeoPull(imageName)}
-                          />
+                  {!isArtifact && (
+                    <TabPanel value={skopeoPull(imageName)} sx={styles.tabPanel}>
+                      <Box sx={styles.tabBox}>
+                        <Grid container item xs={12} sx={styles.pullStringBox}>
+                          <Grid item xs={10}>
+                            <InputBase
+                              onKeyDownCapture={(e) => e.preventDefault()}
+                              sx={styles.textEllipsis}
+                              defaultValue={skopeoPull(imageName)}
+                            />
+                          </Grid>
+                          <Grid item xs={2} onClick={handleCopyClick} sx={styles.copyButtonContainer}>
+                            <IconButton aria-label="copy" data-testid="skopeoPullcopy-btn">
+                              <ContentCopyIcon sx={{ fontSize: '1rem' }} />
+                            </IconButton>
+                          </Grid>
                         </Grid>
-                        <Grid item xs={2} onClick={handleCopyClick} className={classes.copyButtonContainer}>
-                          <IconButton aria-label="copy" data-testid="skopeoPullcopy-btn">
-                            <ContentCopyIcon sx={{ fontSize: '1rem' }} />
-                          </IconButton>
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </TabPanel>}
+                      </Box>
+                    </TabPanel>
+                  )}
                 </Grid>
               </Grid>
             </Box>

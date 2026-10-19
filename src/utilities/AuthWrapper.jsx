@@ -1,22 +1,20 @@
 import React from 'react';
 import { Navigate, Outlet } from 'react-router';
-import makeStyles from '@mui/styles/makeStyles';
+import { Box } from '@mui/material';
 
-const useStyles = makeStyles(() => ({
+const styles = {
   topMargin: {
     marginTop: '10vh',
     minHeight: '90vh',
     height: '100%'
   }
-}));
+};
 
 const AuthWrapper = ({ isLoggedIn, redirect, hasHeader = false }) => {
-  const classes = useStyles();
-
   return isLoggedIn ? (
-    <div className={hasHeader ? classes.topMargin : null}>
+    <Box sx={hasHeader ? styles.topMargin : undefined}>
       <Outlet />
-    </div>
+    </Box>
   ) : (
     <Navigate to={redirect} replace={true} />
   );

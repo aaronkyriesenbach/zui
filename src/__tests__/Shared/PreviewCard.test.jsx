@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import userEvent from '@testing-library/user-event';
 import PreviewCard from 'components/Shared/PreviewCard';
+import MockThemeProvider from '__mocks__/MockThemeProvider';
 
 // usenavigate mock
 const mockedUsedNavigate = jest.fn();
@@ -29,7 +30,11 @@ afterEach(() => {
 
 describe('Preview card component', () => {
   it('navigates to repo page when clicked', async () => {
-    render(<PreviewCard name={mockImage.name} lastUpdated={mockImage.lastUpdated} />);
+    render(
+      <MockThemeProvider>
+        <PreviewCard name={mockImage.name} lastUpdated={mockImage.lastUpdated} />
+      </MockThemeProvider>
+    );
     const cardTitle = await screen.findByText('alpine');
     expect(cardTitle).toBeInTheDocument();
     await userEvent.click(cardTitle);

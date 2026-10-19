@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@mui/styles';
 import { useNavigate } from 'react-router';
 import { Box, Card, CardContent, Collapse, Grid, Stack, Tooltip, Typography, Divider } from '@mui/material';
 import { Markdown } from 'utilities/MarkdowntojsxWrapper';
@@ -8,15 +7,16 @@ import { DateTime } from 'luxon';
 import { KeyboardArrowDown, KeyboardArrowRight } from '@mui/icons-material';
 import DeleteTag from 'components/Shared/DeleteTag';
 
-const useStyles = makeStyles((theme) => ({
+const styles = {
   card: {
     marginBottom: '1rem',
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    background: '#FFFFFF',
+    backgroundColor: 'background.paper',
     boxShadow: 'none',
-    border: '1px solid #E0E5EB',
+    border: '1px solid',
+    borderColor: 'border.main',
     borderRadius: '0.75rem',
     flex: 'none',
     alignSelf: 'stretch',
@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     textAlign: 'left',
-    color: '#606060',
+    color: 'text.subtle',
     padding: '2% 3% 2% 3%',
     width: '100%'
   },
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: 'pointer'
   },
   dropdownToggle: {
-    color: '#1479FF',
+    color: 'text.link',
     paddingTop: '1rem',
     fontSize: '0.8125rem',
     fontWeight: '600',
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center'
   },
   dropdownText: {
-    color: '#1479FF',
+    color: 'text.link',
     paddingTop: '1rem',
     fontSize: '1rem',
     fontWeight: '600',
@@ -53,12 +53,12 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center'
   },
   tagHeading: {
-    color: '#828282',
+    color: 'text.faint',
     fontSize: '1rem',
     marginBottom: '0.5rem'
   },
   tagName: {
-    color: '#1479FF',
+    color: 'text.link',
     fontSize: '1rem',
     marginBottom: '0.5rem',
     textDecorationLine: 'underline',
@@ -67,22 +67,21 @@ const useStyles = makeStyles((theme) => ({
   cardDivider: {
     marginTop: '1rem',
     marginBottom: '1rem',
-    border: '1px solid #E0E5EB'
+    border: '1px solid',
+    borderColor: 'border.main'
   },
   manifsetsTable: {
     marginTop: '1rem'
   },
   tableHeaderText: {
-    color: theme.palette.secondary.dark,
+    color: 'text.muted',
     fontSize: '1rem'
   }
-}));
+};
 
 export default function TagCard(props) {
   const { repoName, showRepoName = true, tag, lastUpdated, vendor, manifests, repo, onTagDelete, isDeletable } = props;
   const [open, setOpen] = useState(false);
-
-  const classes = useStyles();
 
   const lastDate = lastUpdated
     ? DateTime.fromISO(lastUpdated).toRelative({ unit: ['weeks', 'days', 'hours', 'minutes'] })
@@ -97,15 +96,15 @@ export default function TagCard(props) {
   };
 
   return (
-    <Card className={classes.card} raised>
-      <CardContent className={classes.content}>
+    <Card sx={styles.card} raised>
+      <CardContent sx={styles.content}>
         <Stack direction="row" spacing={2} justifyContent="space-between">
-          <Typography variant="body1" align="left" className={classes.tagHeading}>
+          <Typography variant="body1" align="left" sx={styles.tagHeading}>
             Tag
           </Typography>
           {isDeletable && <DeleteTag repo={repo} tag={tag} onTagDelete={onTagDelete} />}
         </Stack>
-        <Typography variant="body1" align="left" className={classes.tagName} onClick={() => goToTags()}>
+        <Typography variant="body1" align="left" sx={styles.tagName} onClick={() => goToTags()}>
           {showRepoName && `${repoName}:`}
           {tag}
         </Typography>
@@ -120,32 +119,28 @@ export default function TagCard(props) {
             </Typography>
           </Tooltip>
         </Stack>
-        <Divider variant="fullWidth" className={classes.cardDivider} />
+        <Divider variant="fullWidth" sx={styles.cardDivider} />
         <Stack direction="row" onClick={() => setOpen(!open)}>
-          {!open ? (
-            <KeyboardArrowRight className={classes.dropdownText} />
-          ) : (
-            <KeyboardArrowDown className={classes.dropdownText} />
-          )}
-          <Typography className={classes.dropdownToggle}>{!open ? `Show more` : `Show less`}</Typography>
+          {!open ? <KeyboardArrowRight sx={styles.dropdownText} /> : <KeyboardArrowDown sx={styles.dropdownText} />}
+          <Typography sx={styles.dropdownToggle}>{!open ? `Show more` : `Show less`}</Typography>
         </Stack>
         <Collapse in={open} timeout="auto" unmountOnExit>
-          <Box className={classes.manifsetsTable}>
+          <Box sx={styles.manifsetsTable}>
             <Grid container item xs={12} direction={'row'}>
               <Grid item xs={6} md={6}>
-                <Typography variant="body1" className={classes.tableHeaderText}>
+                <Typography variant="body1" sx={styles.tableHeaderText}>
                   DIGEST
                 </Typography>
               </Grid>
-              <Grid item xs={6} md={3} className={classes.tableHeaderText}>
+              <Grid item xs={6} md={3} sx={styles.tableHeaderText}>
                 <Typography variant="body1">OS/Arch</Typography>
               </Grid>
               <Grid
                 item
                 xs={0}
                 md={3}
-                className={`${classes.tableHeaderText} hide-on-mobile`}
-                sx={{ display: 'flex', justifyContent: 'flex-end' }}
+                className="hide-on-mobile"
+                sx={[styles.tableHeaderText, { display: 'flex', justifyContent: 'flex-end' }]}
               >
                 <Typography variant="body1"> COMPRESSED SIZE </Typography>
               </Grid>
@@ -157,7 +152,7 @@ export default function TagCard(props) {
                   <Tooltip title={el.digest || ''} placement="top">
                     <Typography
                       variant="body1"
-                      sx={{ color: '#1479FF', textDecorationLine: 'underline', cursor: 'pointer' }}
+                      sx={{ color: 'text.link', textDecorationLine: 'underline', cursor: 'pointer' }}
                       onClick={() => goToTags(el.digest)}
                     >
                       {el.digest?.substr(0, 12)}
